@@ -1,0 +1,8 @@
+[ package ]
+name = example
+version = 1.0.0
+author = Nick Dugger
+license = MIT
+
+[ dependencies ]
+foo = git:address/to/git/repo
