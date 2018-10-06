@@ -1,35 +1,41 @@
 # include <exception>
+# include <functional>
 # include <iostream>
+# include <map>
 # include <queue>
 # include <string>
 
-# include "grok/objects/command.cpp"
+# include "grok/commands/help.cpp"
+# include "grok/commands/make.cpp"
+# include "grok/commands/sync.cpp"
+# include "grok/commands/update.cpp"
+# include "grok/commands/use.cpp"
 
 using namespace std;
-using namespace grok::objects;
+using namespace grok::commands;
+
+const map<string, function<int(queue<string>)>> commands = {
+    { "help", help },
+    { "make", make },
+    { "sync", sync },
+    { "update", update },
+    { "use", use }
+};
+
+queue<string> arguments;
 
 int main (int arg_count, char* arg_vector[]) {
-    auto arg_queue = queue<string>();
 
     if (arg_count < 2) {
-        // TODO run help command? show message? allow flags? (-v)
+        return help(arguments);
     }
-    else try {
+    else {
         string name = arg_vector[ 1 ];
 
         for (int i = 2; i < arg_count; ++i) {
-            arg_queue.push(arg_vector[ i ]);
+            arguments.push(arg_vector[ i ]);
         }
 
-        int status = command(name).execute(arg_queue);
-
-        if (status != 0) {
-            throw exception();
-        }
-
-        return status;
-    }
-    catch (exception& error) {
-        return 1;
+        return commands.at(name)(arguments);
     }
 }

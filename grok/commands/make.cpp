@@ -7,7 +7,7 @@ using namespace std;
 
 namespace grok::commands {
 
-    int new_command (queue<string> arguments) {
+    int make (queue<string> arguments) {
         return 0;
     }
 }

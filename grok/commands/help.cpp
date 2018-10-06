@@ -1,15 +1,16 @@
-# ifndef COMMANDS_HELP
-# define COMMANDS_HELP
+# pragma once
 
+# include <iostream>
 # include <queue>
 # include <string>
 
 using namespace std;
 
 namespace grok::commands {
-    int help_command (queue<string> ar) {
+
+    int help (queue<string> arguments) {
+        cout << "> grok help" << endl;
+
         return 0;
     }
 }
-
-# endif

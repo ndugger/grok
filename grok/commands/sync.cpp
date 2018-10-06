@@ -7,7 +7,7 @@ using namespace std;
 
 namespace grok::commands {
 
-    int sync_command (queue<string> arguments) {
+    int sync (queue<string> arguments) {
         return 0;
     }
 }
