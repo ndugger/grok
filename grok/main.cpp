@@ -1,8 +1,6 @@
-# include <exception>
 # include <functional>
 # include <iostream>
 # include <map>
-# include <queue>
 # include <string>
 
 # include "grok/commands/help.cpp"
@@ -11,10 +9,13 @@
 # include "grok/commands/update.cpp"
 # include "grok/commands/use.cpp"
 
+# include "grok/internal/unrecognized.cpp"
+
 using namespace std;
 using namespace grok::commands;
+using namespace grok::internal;
 
-const map<string, function<int(queue<string>)>> commands = {
+map<string, function<int(string[])>> commands = {
     { "help", help },
     { "make", make },
     { "sync", sync },
@@ -22,20 +23,21 @@ const map<string, function<int(queue<string>)>> commands = {
     { "use", use }
 };
 
-queue<string> arguments;
+int main (int size, char* arguments[]) {
+    string command_name = arguments[ 1 ];
+    string command_arguments[ size - 2 ];
 
-int main (int arg_count, char* arg_vector[]) {
+    for (int i = 0; i < size - 2; ++i) {
+        command_arguments[ i ] = arguments[ i + 2 ];
+    }
 
-    if (arg_count < 2) {
-        return help(arguments);
+    if (size < 2) {
+        return help(command_arguments);
+    }
+    else if (commands[ command_name ] == nullptr) {
+        return unrecognized(command_name);
     }
     else {
-        string name = arg_vector[ 1 ];
-
-        for (int i = 2; i < arg_count; ++i) {
-            arguments.push(arg_vector[ i ]);
-        }
-
-        return commands.at(name)(arguments);
+        return commands[ command_name ](command_arguments);
     }
 }
