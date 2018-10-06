@@ -3,6 +3,8 @@
 # include <map>
 # include <string>
 
+# include "git2/global.h"
+
 # include "grok/commands/help.cpp"
 # include "grok/commands/make.cpp"
 # include "grok/commands/sync.cpp"
@@ -30,6 +32,8 @@ int main (int size, char* arguments[]) {
     for (int i = 0; i < size - 2; ++i) {
         command_arguments[ i ] = arguments[ i + 2 ];
     }
+
+    git_libgit2_init();
 
     if (size < 2) {
         return help(command_arguments);
