@@ -4,11 +4,13 @@ project(grok)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS -pthread)
 
+include_directories(.)
 add_executable(grok grok/main.cpp)
 
-include_directories(. libgit2/include)
+include_directories(libgit2/include)
+add_library(git2 SHARED IMPORTED)
+set_target_properties(git2 PROPERTIES IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/libgit2/build/libgit2.so")
 
-add_library(libgit2 SHARED IMPORTED)
-set_target_properties(libgit2 PROPERTIES IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/libgit2/build/libgit2.so")
+include_directories(json/single_include)
 
-target_link_libraries(grok libgit2)
+target_link_libraries(grok git2)

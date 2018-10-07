@@ -1,0 +1,10 @@
+{
+    "package": {
+        "name": "fusion",
+        "version": "1.0.0",
+        "repository": "git@github.com:fyrware/fusion.git"
+    },
+    "dependencies": {
+        
+    }
+}
