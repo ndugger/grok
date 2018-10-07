@@ -1,8 +1,8 @@
 {
     "package": {
-        "name": "fusion",
+        "name": "wtk",
         "release": "master",
-        "repository": "https://github.com/fyrware/fusion.git",
+        "repository": "https://github.com/fyrware/wtk.git",
         "standard": "17",
         "flags": [
             "pthread"
@@ -10,5 +10,8 @@
         "include": [
             "."
         ]
+    },
+    "dependencies": {
+        "fusion": "master"
     }
 }

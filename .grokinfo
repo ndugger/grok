@@ -1,0 +1,19 @@
+{
+  "package": {
+    "name": "grok",
+    "release": "master",
+    "repository": "https://github.com/fyrware/grok.git",
+    "include": [
+      ".",
+      "libraries/json/single_include",
+      "libraries/git2/include"
+    ],
+    "link": [
+      "stdc++fs",
+      "git2"
+    ]
+  },
+  "libraries": {
+    "git2": "libraries/git2/build/libgit2.so"
+  }
+}

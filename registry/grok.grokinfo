@@ -15,8 +15,5 @@
     },
     "libraries": {
         "git2": "libraries/git2/build/libgit2.so"
-    },
-    "dependencies": {
-
     }
 }
