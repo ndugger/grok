@@ -1,7 +1,7 @@
 {
     "package": {
         "name": "fusion",
-        "release": "1.0.0",
+        "release": "master",
         "repository": "https://github.com/fyrware/fusion.git"
     },
     "dependencies": {

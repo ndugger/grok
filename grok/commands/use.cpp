@@ -22,7 +22,20 @@ namespace grok::commands {
             string package_release = package_info[ "package" ][ "release" ];
             string package_repository = package_info[ "package" ][ "repository" ];
 
-            git_repository* repository = clone_package_repository(package_name, package_repository, package_release);
+            if (package_exists(package_name)) {
+                cout << package_name << " is already being used; did you mean 'grok update " << package_name << "'?" << endl;
+            }
+            else {
+                git_repository* repository = clone_package_repository(package_name, package_repository, package_release);
+
+                if (repository == nullptr) {
+                    cout << "unable to clone repository @ " << package_repository << " | " << package_release << endl;
+                }
+                else {
+                    cout << "successfully downloaded " << package_name << endl;
+                    cout << "add '.grok/" << package_name << "/.' to your include directories" << endl;
+                }
+            }
         }
         else {
 
