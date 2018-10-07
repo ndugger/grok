@@ -2,7 +2,10 @@
     "package": {
         "name": "fusion",
         "release": "master",
-        "repository": "https://github.com/fyrware/fusion.git"
+        "repository": "https://github.com/fyrware/fusion.git",
+        "include": [
+            "."
+        ]
     },
     "dependencies": {
 

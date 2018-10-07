@@ -1,6 +1,7 @@
-[submodule "libgit2"]
-	path = libgit2
-	url = https://github.com/libgit2/libgit2.git
-[submodule "json"]
-	path = json
+
+[submodule "libraries/json"]
+	path = libraries/json
 	url = https://github.com/nlohmann/json.git
+[submodule "libraries/git2"]
+	path = libraries/git2
+	url = https://github.com/libgit2/libgit2.git
