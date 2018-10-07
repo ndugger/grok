@@ -13,4 +13,4 @@ set_target_properties(git2 PROPERTIES IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/lib
 
 include_directories(json/single_include)
 
-target_link_libraries(grok git2)
+target_link_libraries(grok git2 stdc++fs)
