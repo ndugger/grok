@@ -19,5 +19,8 @@
         "name": "grok",
         "release": "master",
         "repository": "https://github.com/fyrware/grok.git"
+    },
+    "scripts": {
+        "use": "scripts/build_libgit2.sh"
     }
 }
