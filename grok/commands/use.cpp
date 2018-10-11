@@ -74,16 +74,16 @@ namespace grok::commands {
                 package_release = "master";
             }
 
-            git_repository* discovered_package_repository = discover_package(package_repository, package_release);
+            git_repository* discovered_repository = discover_package(package_repository, package_release);
 
-            if (discovered_package_repository == nullptr) {
+            if (discovered_repository == nullptr) {
                 display_message("unable to clone repository @ " + package_repository + " | " + package_release);
                 uninitialize();
 
                 return 1;
             }
 
-            json discovered_package = open_discovered_package(discovered_package_repository);
+            json discovered_package = open_discovered_package(discovered_repository);
             string discovered_package_name = discovered_package[ "package" ][ "name" ];
 
             package_name = discovered_package_name;
@@ -95,7 +95,7 @@ namespace grok::commands {
                 return 1;
             }
 
-            save_discovered_package(package_name, discovered_package_repository);
+            save_discovered_package(package_name, discovered_repository);
             add_dependency_to_project(package_name, package_release);
             display_message("now using " + package_name);
         }
