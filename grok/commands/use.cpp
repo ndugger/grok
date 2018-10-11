@@ -79,6 +79,7 @@ namespace grok::commands {
             if (discovered_package_repository == nullptr) {
                 display_message("unable to clone repository @ " + package_repository + " | " + package_release);
                 uninitialize();
+
                 return 1;
             }
 
