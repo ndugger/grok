@@ -2,8 +2,7 @@
 # include <iostream>
 # include <map>
 # include <string>
-
-# include "git2/global.h"
+# include <vector>
 
 # include "grok/commands/help.cpp"
 # include "grok/commands/make.cpp"
@@ -11,13 +10,13 @@
 # include "grok/commands/update.cpp"
 # include "grok/commands/use.cpp"
 
-# include "grok/internal/unrecognized.cpp"
+# include "grok/utilities/unrecognized.cpp"
 
 using namespace std;
 using namespace grok::commands;
 using namespace grok::internal;
 
-map<string, function<int(string[])>> commands = {
+map<string, function<int(string, vector<string>)>> commands = {
     { "help", help },
     { "make", make },
     { "sync", sync },
@@ -25,23 +24,23 @@ map<string, function<int(string[])>> commands = {
     { "use", use }
 };
 
-int main (int size, char* arguments[]) {
+int main (int count, char* arguments[]) {
+    string command_from = arguments[ 0 ];
     string command_name = arguments[ 1 ];
-    string command_arguments[ size - 2 ];
 
-    for (int i = 0; i < size - 2; ++i) {
-        command_arguments[ i ] = arguments[ i + 2 ];
+    vector<string> command_arguments;
+
+    for (int i = 0; i < count - 2; ++i) {
+        command_arguments.emplace_back(arguments[ i + 2 ]);
     }
 
-    git_libgit2_init();
-
-    if (size < 2) {
-        return help(command_arguments);
+    if (count < 2) {
+        return help(command_from, command_arguments);
     }
     else if (commands[ command_name ] == nullptr) {
         return unrecognized(command_name);
     }
     else {
-        return commands[ command_name ](command_arguments);
+        return commands[ command_name ](command_from, command_arguments);
     }
 }
