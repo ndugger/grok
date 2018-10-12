@@ -1,20 +1,14 @@
 {
-    "dependencies": {
-        "wtk": "master"
-    },
+    "includes": [
+        ".",
+        "libraries/git2/include",
+        "libraries/json/single_include"
+    ],
     "libraries": {
-        "git2": "libraries/git2/build/libgit2.so"
+        "git2": "libraries/git2/build/libgit2.so",
+        "stdc++fs": null
     },
     "package": {
-        "include": [
-            ".",
-            "libraries/git2/include",
-            "libraries/json/single_include"
-        ],
-        "link": [
-            "stdc++fs",
-            "git2"
-        ],
         "name": "grok",
         "release": "master",
         "repository": "https://github.com/fyrware/grok.git"

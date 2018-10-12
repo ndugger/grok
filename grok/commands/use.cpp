@@ -63,10 +63,24 @@ namespace grok::commands {
                 }
 
                 json dependencies = registered_package[ "dependencies" ];
+                json includes = registered_package[ "includes" ];
+                json libraries = registered_package[ "libraries" ];
 
                 if (dependencies != nullptr) {
                     for (json::iterator dependency = dependencies.begin(); dependency != dependencies.end(); ++dependency) {
                         use(command_from, { dependency.key(), dependency.value() }, false);
+                    }
+                }
+
+                if (includes != nullptr) {
+                    for (json::iterator include = includes.begin(); include != includes.end(); ++include) {
+
+                    }
+                }
+
+                if (libraries != nullptr) {
+                    for (json::iterator library = libraries.begin(); library != libraries.end(); ++library) {
+
                     }
                 }
 
