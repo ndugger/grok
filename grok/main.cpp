@@ -9,14 +9,15 @@
 # include "grok/commands/sync.cpp"
 # include "grok/commands/update.cpp"
 # include "grok/commands/use.cpp"
-
-# include "grok/utilities/unrecognized.cpp"
+# include "grok/core/unrecognized.cpp"
 
 using namespace std;
 using namespace grok::commands;
-using namespace grok::internal;
+using namespace grok::core;
 
-map<string, function<int(string, vector<string>)>> commands = {
+using command = function<int(string, vector<string>, bool)>;
+
+map<string, command> commands = {
     { "help", help },
     { "make", make },
     { "sync", sync },
@@ -41,6 +42,6 @@ int main (int count, char* arguments[]) {
         return unrecognized(command_name);
     }
     else {
-        return commands[ command_name ](command_from, command_arguments);
+        return commands[ command_name ](command_from, command_arguments, true);
     }
 }

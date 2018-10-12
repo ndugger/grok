@@ -1,7 +1,6 @@
 {
     "dependencies": {
-        "fusion": "master",
-        "vincent": "master"
+        "wtk": "master"
     },
     "libraries": {
         "git2": "libraries/git2/build/libgit2.so"

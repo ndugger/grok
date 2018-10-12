@@ -8,15 +8,15 @@
 # include "git2/repository.h"
 # include "nlohmann/json.hpp"
 
-# include "grok/utilities/utilities.cpp"
+# include "grok/core/utilities.cpp"
 
 using namespace std;
 using namespace nlohmann;
-using namespace grok::internal;
+using namespace grok::core;
 
 namespace grok::commands {
 
-    int use (string command_from, vector<string> arguments) {
+    int use (string command_from, vector<string> command_arguments, bool triggered_by_user = true) {
         initialize();
 
         if (!project_exists()) {
@@ -26,15 +26,15 @@ namespace grok::commands {
             return 1;
         }
 
-        if (arguments.empty()) {
+        if (command_arguments.empty()) {
             display_message("use what?");
             uninitialize();
 
             return 1;
         }
 
-        string package_name = arguments.size() > 0 ? arguments.at(0) : "";
-        string package_release = arguments.size() > 1 ? arguments.at(1) : "";
+        string package_name = command_arguments.size() > 0 ? command_arguments[ 0 ] : "";
+        string package_release = command_arguments.size() > 1 ? command_arguments[ 1 ] : "";
 
         if (package_in_use(package_name)) {
             display_message(package_name + " is already being used; did you mean 'grok update " + package_name + "'?");
@@ -57,7 +57,19 @@ namespace grok::commands {
 
             if (package_is_available(package_repository)) {
                 download_package(package_name, package_repository, package_release);
-                add_dependency_to_project(package_name, package_release);
+
+                if (triggered_by_user) {
+                    add_dependency_to_project(package_name, package_release);
+                }
+
+                json dependencies = registered_package[ "dependencies" ];
+
+                if (dependencies != nullptr) {
+                    for (json::iterator dependency = dependencies.begin(); dependency != dependencies.end(); ++dependency) {
+                        use(command_from, { dependency.key(), dependency.value() }, false);
+                    }
+                }
+
                 display_message("now using " + package_name);
             }
             else {

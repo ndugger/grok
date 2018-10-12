@@ -15,7 +15,7 @@ using namespace std;
 using namespace std::experimental;
 using namespace nlohmann;
 
-namespace grok::internal {
+namespace grok::core {
 
     void initialize () {
         git_libgit2_init();
