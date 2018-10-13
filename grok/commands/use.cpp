@@ -16,7 +16,7 @@ using namespace grok::core;
 
 namespace grok::commands {
 
-    int use (string command_from, vector<string> command_arguments, bool command_by_user = false) {
+    int use (string command_directory, vector<string> command_arguments, bool command_by_user = false) {
         initialize();
 
         if (!project_exists()) {
@@ -43,8 +43,8 @@ namespace grok::commands {
             return 1;
         }
 
-        if (registry_contains(command_from, package_name)) {
-            json registered_package = open_registered_package(command_from, package_name);
+        if (registry_contains(command_directory, package_name)) {
+            json registered_package = open_registered_package(command_directory, package_name);
             string package_repository = registered_package[ "package" ][ "repository" ];
 
             if (package_release.empty()) {
@@ -68,19 +68,19 @@ namespace grok::commands {
 
                 if (dependencies != nullptr) {
                     for (json::iterator dependency = dependencies.begin(); dependency != dependencies.end(); ++dependency) {
-                        use(command_from, { dependency.key(), dependency.value() }, false);
+                        use(command_directory, { dependency.key(), dependency.value() }, false);
                     }
                 }
 
                 if (includes != nullptr) {
                     for (json::iterator include = includes.begin(); include != includes.end(); ++include) {
-
+                        add_include_to_project(package_name, package_release, include.value());
                     }
                 }
 
                 if (libraries != nullptr) {
                     for (json::iterator library = libraries.begin(); library != libraries.end(); ++library) {
-
+                        add_library_to_project(package_name, package_release, library.key(), library.value());
                     }
                 }
 
@@ -125,6 +125,28 @@ namespace grok::commands {
 
             if (command_by_user) {
                 add_dependency_to_project(package_name, package_release);
+            }
+
+            json dependencies = discovered_package[ "dependencies" ];
+            json includes = discovered_package[ "includes" ];
+            json libraries = discovered_package[ "libraries" ];
+
+            if (dependencies != nullptr) {
+                for (json::iterator dependency = dependencies.begin(); dependency != dependencies.end(); ++dependency) {
+                    use(command_directory, { dependency.key(), dependency.value() }, false);
+                }
+            }
+
+            if (includes != nullptr) {
+                for (json::iterator include = includes.begin(); include != includes.end(); ++include) {
+                    add_include_to_project(package_name, package_release, include.value());
+                }
+            }
+
+            if (libraries != nullptr) {
+                for (json::iterator library = libraries.begin(); library != libraries.end(); ++library) {
+                    add_library_to_project(package_name, package_release, library.key(), library.value());
+                }
             }
 
             display_message("now using " + package_name);

@@ -33,11 +33,12 @@ namespace grok {
     };
 }
 
-int main (int count, char* arguments[]) {
-    string command_from = regex_replace(arguments[ 0 ], regex("/grok$"), "");
+int main (int count, char* arguments[ ]) {
+    string command_directory = regex_replace(arguments[ 0 ], regex("/grok$"), "");
+    bool command_by_user = true;
 
     if (count <= 1) {
-        return commands::help(command_from, { });
+        return commands::help(command_directory, { }, command_by_user);
     }
 
     string command_name = arguments[ 1 ];
@@ -48,12 +49,10 @@ int main (int count, char* arguments[]) {
         command_arguments.emplace_back(arguments[ i + 2 ]);
     }
 
-    bool command_by_user = true;
-
     if (command_map[ command_name ] == nullptr) {
         return core::unrecognized(command_name);
     }
     else {
-        return command_map[ command_name ](command_from, command_arguments, command_by_user);
+        return command_map[ command_name ](command_directory, command_arguments, command_by_user);
     }
 }

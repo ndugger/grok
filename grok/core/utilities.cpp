@@ -42,11 +42,12 @@ namespace grok::core {
     }
 
     bool registry_contains (string command_from, string package_name) {
-        return filesystem::exists(filesystem::path(command_from) / ".." / "registry" / package_name / ".grokpackage");
+        bool x = filesystem::exists(filesystem::path(command_from) / ".." / "registry" / (package_name + ".grokpackage"));
+        return x;
     }
 
     json open_registered_package (string command_from, string package_name) {
-        auto package_stream = ifstream(filesystem::path(command_from) / ".." / "registry" / package_name / ".grokpackage");
+        auto package_stream = ifstream(filesystem::path(command_from) / ".." / "registry" / (package_name + ".grokpackage"));
         stringstream package_json;
 
         package_json << package_stream.rdbuf();
@@ -118,5 +119,13 @@ namespace grok::core {
         auto file_stream = ofstream(filesystem::current_path() / ".grokpackage");
 
         file_stream << package.dump(4);
+    }
+
+    void add_include_to_project (string package_name, string package_release, string include_location) {
+
+    }
+
+    void add_library_to_project (string package_name, string package_release, string library_name, string library_location) {
+
     }
 }
