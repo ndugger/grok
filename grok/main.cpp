@@ -1,6 +1,6 @@
 # include <functional>
-# include <iostream>
 # include <map>
+# include <regex>
 # include <string>
 # include <vector>
 
@@ -11,22 +11,35 @@
 # include "grok/commands/use.cpp"
 # include "grok/core/unrecognized.cpp"
 
-using namespace std;
-using namespace grok::commands;
-using namespace grok::core;
+using std::function;
+using std::map;
+using std::regex;
+using std::regex_replace;
+using std::string;
+using std::vector;
 
-using command = function<int(string, vector<string>, bool)>;
+using namespace grok;
 
-map<string, command> commands = {
-    { "help", help },
-    { "make", make },
-    { "sync", sync },
-    { "update", update },
-    { "use", use }
-};
+namespace grok {
+
+    typedef function<int(string, vector<string>, bool)> command;
+
+    map<string, command> command_map = {
+        { "help", commands::help },
+        { "make", commands::make },
+        { "sync", commands::sync },
+        { "update", commands::update },
+        { "use", commands::use }
+    };
+}
 
 int main (int count, char* arguments[]) {
-    string command_from = arguments[ 0 ];
+    string command_from = regex_replace(arguments[ 0 ], regex("/grok$"), "");
+
+    if (count <= 1) {
+        return commands::help(command_from, { });
+    }
+
     string command_name = arguments[ 1 ];
 
     vector<string> command_arguments;
@@ -35,13 +48,12 @@ int main (int count, char* arguments[]) {
         command_arguments.emplace_back(arguments[ i + 2 ]);
     }
 
-    if (count < 2) {
-        return help(command_from, command_arguments);
-    }
-    else if (commands[ command_name ] == nullptr) {
-        return unrecognized(command_name);
+    bool command_by_user = true;
+
+    if (command_map[ command_name ] == nullptr) {
+        return core::unrecognized(command_name);
     }
     else {
-        return commands[ command_name ](command_from, command_arguments, true);
+        return command_map[ command_name ](command_from, command_arguments, command_by_user);
     }
 }

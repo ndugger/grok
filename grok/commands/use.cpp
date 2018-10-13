@@ -16,7 +16,7 @@ using namespace grok::core;
 
 namespace grok::commands {
 
-    int use (string command_from, vector<string> command_arguments, bool triggered_by_user = true) {
+    int use (string command_from, vector<string> command_arguments, bool command_by_user = false) {
         initialize();
 
         if (!project_exists()) {
@@ -43,8 +43,8 @@ namespace grok::commands {
             return 1;
         }
 
-        if (registry_contains(package_name)) {
-            json registered_package = open_registered_package(package_name);
+        if (registry_contains(command_from, package_name)) {
+            json registered_package = open_registered_package(command_from, package_name);
             string package_repository = registered_package[ "package" ][ "repository" ];
 
             if (package_release.empty()) {
@@ -58,7 +58,7 @@ namespace grok::commands {
             if (package_is_available(package_repository)) {
                 download_package(package_name, package_repository, package_release);
 
-                if (triggered_by_user) {
+                if (command_by_user) {
                     add_dependency_to_project(package_name, package_release);
                 }
 
@@ -122,7 +122,11 @@ namespace grok::commands {
             }
 
             save_discovered_package(package_name, discovered_repository);
-            add_dependency_to_project(package_name, package_release);
+
+            if (command_by_user) {
+                add_dependency_to_project(package_name, package_release);
+            }
+
             display_message("now using " + package_name);
         }
 

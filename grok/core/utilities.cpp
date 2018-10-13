@@ -38,15 +38,15 @@ namespace grok::core {
     }
 
     bool project_exists () {
-        return filesystem::exists(filesystem::path("../.grokpackage"));
+        return filesystem::exists(filesystem::current_path() / ".grokpackage");
     }
 
-    bool registry_contains (string package_name) {
-        return filesystem::exists(filesystem::path("../registry/" + package_name + ".grokpackage"));
+    bool registry_contains (string command_from, string package_name) {
+        return filesystem::exists(filesystem::path(command_from) / ".." / "registry" / package_name / ".grokpackage");
     }
 
-    json open_registered_package (string package_name) {
-        auto package_stream = ifstream("../registry/" + package_name + ".grokpackage");
+    json open_registered_package (string command_from, string package_name) {
+        auto package_stream = ifstream(filesystem::path(command_from) / ".." / "registry" / package_name / ".grokpackage");
         stringstream package_json;
 
         package_json << package_stream.rdbuf();
@@ -55,7 +55,7 @@ namespace grok::core {
     }
 
     bool package_in_use (string package_name) {
-        return filesystem::exists(filesystem::path("../.grok/" + package_name));
+        return filesystem::exists(filesystem::current_path() / ".grok" / package_name);
     }
 
     bool package_is_available (string package_repository) {
@@ -85,7 +85,7 @@ namespace grok::core {
     void save_discovered_package (string package_name, git_repository* discovered_package_repository) {
         filesystem::rename(
             filesystem::temp_directory_path() / ".groktemp",
-            filesystem::path("..") / ".grok" / package_name
+            filesystem::current_path() / ".grok" / package_name
         );
     }
 
@@ -95,13 +95,13 @@ namespace grok::core {
 
         git_repository* repository = nullptr;
 
-        git_clone(&repository, package_repository.c_str(), (filesystem::path("..") / ".grok" / package_name).c_str(), &clone_opts);
+        git_clone(&repository, package_repository.c_str(), (filesystem::current_path() / ".grok" / package_name).c_str(), &clone_opts);
 
         return repository;
     }
 
     void add_dependency_to_project (string package_name, string package_release) {
-        auto package_stream = ifstream("../.grokpackage");
+        auto package_stream = ifstream(filesystem::current_path() / ".grokpackage");
         stringstream package_json;
 
         package_json << package_stream.rdbuf();
@@ -115,12 +115,8 @@ namespace grok::core {
             package[ "dependencies" ][ package_name ] = package_release;
         }
 
-        auto file_stream = ofstream("../.grokpackage");
+        auto file_stream = ofstream(filesystem::current_path() / ".grokpackage");
 
         file_stream << package.dump(4);
-    }
-
-    string generate_cmake () {
-
     }
 }
