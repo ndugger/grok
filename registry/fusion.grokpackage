@@ -1,14 +1,10 @@
 {
+    "includes": [
+        "."
+    ],
     "package": {
         "name": "fusion",
         "release": "master",
-        "repository": "https://github.com/fyrware/fusion.git",
-        "standard": "17",
-        "flags": [
-            "pthread"
-        ],
-        "include": [
-            "."
-        ]
+        "repository": "https://github.com/fyrware/fusion.git"
     }
 }

@@ -1,18 +1,25 @@
 # pragma once
 
+# include <experimental/filesystem>
 # include <iostream>
 # include <fstream>
 # include <string>
-
-# include <experimental/filesystem>
 
 # include "git2/clone.h"
 # include "git2/global.h"
 # include "git2/repository.h"
 # include "nlohmann/json.hpp"
 
-using namespace std;
 using namespace std::experimental;
+
+using std::cout;
+using std::endl;
+using std::ifstream;
+using std::iostream;
+using std::ofstream;
+using std::string;
+using std::stringstream;
+
 using namespace nlohmann;
 
 namespace grok::core {
@@ -42,8 +49,7 @@ namespace grok::core {
     }
 
     bool registry_contains (string command_from, string package_name) {
-        bool x = filesystem::exists(filesystem::path(command_from) / ".." / "registry" / (package_name + ".grokpackage"));
-        return x;
+        return filesystem::exists(filesystem::path(command_from) / ".." / "registry" / (package_name + ".grokpackage"));
     }
 
     json open_registered_package (string command_from, string package_name) {
@@ -74,7 +80,7 @@ namespace grok::core {
         return repository;
     }
 
-    json open_discovered_package (git_repository* discovered_package_repository) {
+    json open_discovered_package () {
         auto package_stream = ifstream(filesystem::temp_directory_path() / ".groktemp" / ".grokpackage");
         stringstream package_json;
 
@@ -83,7 +89,7 @@ namespace grok::core {
         return json::parse(package_json);
     }
 
-    void save_discovered_package (string package_name, git_repository* discovered_package_repository) {
+    void save_discovered_package (string package_name, string package_release) {
         filesystem::rename(
             filesystem::temp_directory_path() / ".groktemp",
             filesystem::current_path() / ".grok" / package_name
@@ -119,13 +125,5 @@ namespace grok::core {
         auto file_stream = ofstream(filesystem::current_path() / ".grokpackage");
 
         file_stream << package.dump(4);
-    }
-
-    void add_include_to_project (string package_name, string package_release, string include_location) {
-
-    }
-
-    void add_library_to_project (string package_name, string package_release, string library_name, string library_location) {
-
     }
 }

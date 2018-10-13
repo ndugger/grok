@@ -10,7 +10,9 @@
 
 # include "grok/core/utilities.cpp"
 
-using namespace std;
+using std::string;
+using std::vector;
+
 using namespace nlohmann;
 using namespace grok::core;
 
@@ -63,24 +65,10 @@ namespace grok::commands {
                 }
 
                 json dependencies = registered_package[ "dependencies" ];
-                json includes = registered_package[ "includes" ];
-                json libraries = registered_package[ "libraries" ];
 
                 if (dependencies != nullptr) {
                     for (json::iterator dependency = dependencies.begin(); dependency != dependencies.end(); ++dependency) {
                         use(command_directory, { dependency.key(), dependency.value() }, false);
-                    }
-                }
-
-                if (includes != nullptr) {
-                    for (json::iterator include = includes.begin(); include != includes.end(); ++include) {
-                        add_include_to_project(package_name, package_release, include.value());
-                    }
-                }
-
-                if (libraries != nullptr) {
-                    for (json::iterator library = libraries.begin(); library != libraries.end(); ++library) {
-                        add_library_to_project(package_name, package_release, library.key(), library.value());
                     }
                 }
 
@@ -109,7 +97,7 @@ namespace grok::commands {
                 return 1;
             }
 
-            json discovered_package = open_discovered_package(discovered_repository);
+            json discovered_package = open_discovered_package();
             string discovered_package_name = discovered_package[ "package" ][ "name" ];
 
             package_name = discovered_package_name;
@@ -121,31 +109,17 @@ namespace grok::commands {
                 return 1;
             }
 
-            save_discovered_package(package_name, discovered_repository);
+            save_discovered_package(package_name, package_release);
 
             if (command_by_user) {
                 add_dependency_to_project(package_name, package_release);
             }
 
             json dependencies = discovered_package[ "dependencies" ];
-            json includes = discovered_package[ "includes" ];
-            json libraries = discovered_package[ "libraries" ];
 
             if (dependencies != nullptr) {
                 for (json::iterator dependency = dependencies.begin(); dependency != dependencies.end(); ++dependency) {
                     use(command_directory, { dependency.key(), dependency.value() }, false);
-                }
-            }
-
-            if (includes != nullptr) {
-                for (json::iterator include = includes.begin(); include != includes.end(); ++include) {
-                    add_include_to_project(package_name, package_release, include.value());
-                }
-            }
-
-            if (libraries != nullptr) {
-                for (json::iterator library = libraries.begin(); library != libraries.end(); ++library) {
-                    add_library_to_project(package_name, package_release, library.key(), library.value());
                 }
             }
 
