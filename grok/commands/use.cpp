@@ -17,7 +17,7 @@ namespace grok::commands {
     using namespace nlohmann;
     using namespace grok::core;
 
-    int use (string command_directory, vector<string> command_arguments, bool command_by_user = false) {
+    int use (string command_binary_location, vector<string> command_arguments, bool command_by_user) {
         initialize();
 
         if (!project_exists()) {
@@ -44,8 +44,8 @@ namespace grok::commands {
             return 1;
         }
 
-        if (registry_contains(command_directory, package_name)) {
-            json registered_package = open_registered_package(command_directory, package_name);
+        if (registry_contains(command_binary_location, package_name)) {
+            json registered_package = open_registered_package(command_binary_location, package_name);
             string package_repository = registered_package[ "package" ][ "repository" ];
 
             if (package_release.empty()) {
@@ -72,7 +72,7 @@ namespace grok::commands {
                             continue;
                         }
 
-                        use(command_directory, { dependency.key(), dependency.value() }, false);
+                        use(command_binary_location, { dependency.key(), dependency.value() }, false);
                     }
                 }
 
@@ -123,7 +123,7 @@ namespace grok::commands {
 
             if (dependencies != nullptr) {
                 for (json::iterator dependency = dependencies.begin(); dependency != dependencies.end(); ++dependency) {
-                    use(command_directory, { dependency.key(), dependency.value() }, false);
+                    use(command_binary_location, { dependency.key(), dependency.value() }, false);
                 }
             }
 

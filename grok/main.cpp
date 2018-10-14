@@ -1,3 +1,4 @@
+# include <array>
 # include <functional>
 # include <map>
 # include <regex>
@@ -13,8 +14,11 @@
 # include "grok/core/unrecognized.cpp"
 
 namespace grok {
+    using std::array;
     using std::function;
     using std::map;
+    using std::regex;
+    using std::regex_replace;
     using std::string;
     using std::vector;
 
@@ -28,33 +32,32 @@ namespace grok {
         { "update", commands::update },
         { "use", commands::use }
     };
+
+    int execute (vector<string> arguments) {
+        string command_binary_location = regex_replace(arguments[ 0 ], regex("/grok$"), "");
+        bool command_by_user = true;
+
+        if (arguments.size() <= 1) {
+            return commands::help(command_binary_location, { }, command_by_user);
+        }
+
+        string command_name = arguments[ 1 ];
+
+        vector<string> command_arguments;
+
+        for (int i = 0; i < arguments.size() - 2; ++i) {
+            command_arguments.emplace_back(arguments[ i + 2 ]);
+        }
+
+        if (command_map[ command_name ] == nullptr) {
+            return core::unrecognized(command_name);
+        }
+        else {
+            return command_map[ command_name ](command_binary_location, command_arguments, command_by_user);
+        }
+    }
 }
 
-int main (int count, char* arguments[ ]) {
-    using std::regex;
-    using std::regex_replace;
-    using std::string;
-    using std::vector;
-
-    string command_directory = regex_replace(arguments[ 0 ], regex("/grok$"), "");
-    bool command_by_user = true;
-
-    if (count <= 1) {
-        return grok::commands::help(command_directory, { }, command_by_user);
-    }
-
-    string command_name = arguments[ 1 ];
-
-    vector<string> command_arguments;
-
-    for (int i = 0; i < count - 2; ++i) {
-        command_arguments.emplace_back(arguments[ i + 2 ]);
-    }
-
-    if (grok::command_map[ command_name ] == nullptr) {
-        return grok::core::unrecognized(command_name);
-    }
-    else {
-        return grok::command_map[ command_name ](command_directory, command_arguments, command_by_user);
-    }
+int main (int arg_c, char* arg_v[ ]) {
+    return grok::execute(std::vector<std::string>(arg_v, arg_v + arg_c));
 }
