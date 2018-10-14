@@ -10,13 +10,12 @@
 
 # include "grok/core/utilities.cpp"
 
-using std::string;
-using std::vector;
-
-using namespace nlohmann;
-using namespace grok::core;
-
 namespace grok::commands {
+    using std::string;
+    using std::vector;
+
+    using namespace nlohmann;
+    using namespace grok::core;
 
     int use (string command_directory, vector<string> command_arguments, bool command_by_user = false) {
         initialize();
@@ -68,6 +67,11 @@ namespace grok::commands {
 
                 if (dependencies != nullptr) {
                     for (json::iterator dependency = dependencies.begin(); dependency != dependencies.end(); ++dependency) {
+
+                        if (project_depends_on(dependency.key())) {
+                            continue;
+                        }
+
                         use(command_directory, { dependency.key(), dependency.value() }, false);
                     }
                 }

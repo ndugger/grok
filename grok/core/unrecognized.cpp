@@ -5,10 +5,10 @@
 
 # include "grok/core/utilities.cpp"
 
-using namespace std;
-using namespace grok::core;
-
 namespace grok::core {
+
+    using namespace std;
+    using namespace grok::core;
 
     int unrecognized (string command_name) {
         display_message("unrecognized command: " + command_name);
