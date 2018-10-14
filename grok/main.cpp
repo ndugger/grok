@@ -1,4 +1,3 @@
-# include <array>
 # include <functional>
 # include <map>
 # include <regex>
@@ -14,7 +13,6 @@
 # include "grok/core/unrecognized.cpp"
 
 namespace grok {
-    using std::array;
     using std::function;
     using std::map;
     using std::regex;
