@@ -9,7 +9,7 @@ namespace grok::commands {
 
     using namespace std;
 
-    int help (string command_from, vector<string> command_arguments, bool triggered_by_user = true) {
+    int help (const string& command_origin, const bool& command_by_user, const vector<string>& command_arguments) {
         cout << "> grok help" << endl;
 
         return 0;

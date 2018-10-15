@@ -17,7 +17,7 @@ namespace grok::commands {
     using namespace nlohmann;
     using namespace grok::core;
 
-    int use (const string& command_origin, const vector<string>& command_arguments, const bool& command_by_user) {
+    const int use (const string& command_origin, const bool& command_by_user, const vector<string>& command_arguments) {
         initialize();
 
         if (!project_exists()) {
@@ -72,7 +72,7 @@ namespace grok::commands {
                             continue;
                         }
 
-                        use(command_origin, { dependency.key(), dependency.value() }, false);
+                        use(command_origin, false, { dependency.key(), dependency.value() });
                     }
                 }
 

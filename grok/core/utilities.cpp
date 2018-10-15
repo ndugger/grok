@@ -50,16 +50,25 @@ namespace grok::core {
         return fs::exists(fs::current_path() / ".grokpackage");
     }
 
+    json open_project () {
+        auto project_stream = ifstream(fs::current_path() / ".grokpackage");
+        stringstream project_json;
+
+        project_json << project_stream.rdbuf();
+
+        return json::parse(project_json);
+    }
+
     bool project_depends_on (string package_name) {
         return false;
     }
 
-    bool registry_contains (string command_from, string package_name) {
-        return fs::exists(fs::path(command_from) / ".." / "registry" / (package_name + ".grokpackage"));
+    bool registry_contains (string command_origin, string package_name) {
+        return fs::exists(fs::path(command_origin) / ".." / "registry" / (package_name + ".grokpackage"));
     }
 
-    json open_registered_package (string command_from, string package_name) {
-        auto package_stream = ifstream(fs::path(command_from) / ".." / "registry" / (package_name + ".grokpackage"));
+    json open_registered_package (string command_origin, string package_name) {
+        auto package_stream = ifstream(fs::path(command_origin) / ".." / "registry" / (package_name + ".grokpackage"));
         stringstream package_json;
 
         package_json << package_stream.rdbuf();
@@ -97,8 +106,8 @@ namespace grok::core {
 
     void save_discovered_package (string package_name, string package_release) {
         fs::rename(
-                fs::temp_directory_path() / ".groktemp",
-                fs::current_path() / ".grok" / package_name
+            fs::temp_directory_path() / ".groktemp",
+            fs::current_path() / ".grok" / package_name
         );
     }
 
@@ -133,7 +142,26 @@ namespace grok::core {
         file_stream << package.dump(4);
     }
 
-    void generate_cmake () {
+    string generate_cmake (string command_origin, json parent_package) {
+        stringstream cmake_source;
 
+        if (parent_package.find("dependencies") != parent_package.end()) {
+            json dependencies = parent_package.at("dependencies");
+
+            for (json::iterator dependency = dependencies.begin(); dependency != dependencies.end(); ++dependency) {
+                if (registry_contains(command_origin, dependency.key())) {
+                    json child_package = open_registered_package(command_origin, dependency.key());
+
+                    // append includes, libraries, flags? etc.
+
+                    cmake_source << generate_cmake(command_origin, child_package) << endl;
+                }
+                else {
+
+                }
+            }
+        }
+
+        return cmake_source.str();
     }
 }

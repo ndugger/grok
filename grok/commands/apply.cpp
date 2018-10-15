@@ -18,7 +18,7 @@ namespace grok::commands {
     using namespace nlohmann;
     using namespace grok::core;
 
-    int apply (string command_directory, vector<string> command_arguments, bool command_by_user) {
+    int apply (const string& command_origin, const bool& command_by_user, const vector<string>& command_arguments) {
 
     }
 }

@@ -21,7 +21,7 @@ namespace grok {
     using std::string;
     using std::vector;
 
-    typedef function<int(string, vector<string>, bool)> command;
+    using command = function<int(string, bool, vector<string>)>;
 
     const map<string, command> command_map = {
         { "apply", commands::apply },
@@ -32,12 +32,12 @@ namespace grok {
         { "use", commands::use }
     };
 
-    int execute (const vector<string> arguments) {
+    const int execute (const vector<string>& arguments) {
         const string command_origin = regex_replace(arguments.at(0), regex("/grok$"), "");
         const bool command_by_user = true;
 
         if (arguments.size() <= 1) {
-            return commands::help(command_origin, { }, command_by_user);
+            return commands::help(command_origin, command_by_user, { });
         }
 
         const string command_name = arguments.at(1);
@@ -52,10 +52,10 @@ namespace grok {
             command_arguments.emplace_back(arguments.at(i + 2));
         }
 
-        return command_map.at(command_name)(command_origin, command_arguments, command_by_user);
+        return command_map.at(command_name)(command_origin, command_by_user, command_arguments);
     }
 }
 
-int main (int arg_c, char* arg_v[ ]) {
-    return grok::execute(std::vector<std::string>(arg_v, arg_v + arg_c));
+int main (int argument_count, char* argument_values[]) {
+    return grok::execute(std::vector<std::string>(argument_values, argument_values + argument_count));
 }

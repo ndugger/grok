@@ -7,7 +7,7 @@ namespace grok::commands {
 
     using namespace std;
 
-    int make (string command_from, vector<string> command_arguments, bool triggered_by_user = true) {
+    int make (const string& command_origin, const bool& command_by_user, const vector<string>& command_arguments) {
         return 0;
     }
 }
