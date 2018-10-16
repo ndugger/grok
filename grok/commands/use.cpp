@@ -8,6 +8,7 @@
 # include "git2/repository.h"
 # include "nlohmann/json.hpp"
 
+# include "grok/core/generators/cmake.cpp"
 # include "grok/core/utilities.cpp"
 
 namespace grok::commands {
@@ -63,7 +64,7 @@ namespace grok::commands {
                     add_dependency_to_project(package_name, package_release);
                 }
 
-                cout << generate_cmake(command_origin, open_project(), true) << endl;
+                cout << generators::cmake(command_origin, open_project(), true) << endl;
 
                 json dependencies = registered_package[ "dependencies" ];
 

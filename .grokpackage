@@ -18,5 +18,8 @@
     },
     "scripts": {
         "use": "scripts/build_libgit2.sh"
-    }
+    },
+    "sources": [
+        "grok/main.cpp"
+    ]
 }
