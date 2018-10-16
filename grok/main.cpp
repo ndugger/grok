@@ -33,7 +33,7 @@ namespace grok {
     };
 
     const int execute (const vector<string>& arguments) {
-        const string command_origin = regex_replace(arguments.at(0), regex("/grok$"), "");
+        const string command_origin = regex_replace(arguments.at(0), regex("grok(?:.exe)?$"), "..");
         const bool command_by_user = true;
 
         if (arguments.size() <= 1) {

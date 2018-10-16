@@ -63,6 +63,8 @@ namespace grok::commands {
                     add_dependency_to_project(package_name, package_release);
                 }
 
+                cout << generate_cmake(command_origin, open_project(), true) << endl;
+
                 json dependencies = registered_package[ "dependencies" ];
 
                 if (dependencies != nullptr) {
@@ -123,7 +125,7 @@ namespace grok::commands {
 
             if (dependencies != nullptr) {
                 for (json::iterator dependency = dependencies.begin(); dependency != dependencies.end(); ++dependency) {
-                    use(command_origin, { dependency.key(), dependency.value() }, false);
+                    use(command_origin, false, { dependency.key(), dependency.value() });
                 }
             }
 

@@ -1,4 +1,7 @@
 {
+    "dependencies": {
+        "fusion": "master"
+    },
     "includes": [
         ".",
         "libraries/git2/include",

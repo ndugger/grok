@@ -5,6 +5,7 @@
 # include <iostream>
 # include <fstream>
 # include <string>
+# include <vector>
 
 # include "git2/clone.h"
 # include "git2/global.h"
@@ -12,13 +13,13 @@
 # include "nlohmann/json.hpp"
 
 namespace grok::core {
-
     using std::cout;
     using std::endl;
     using std::ifstream;
     using std::ofstream;
     using std::string;
     using std::stringstream;
+    using std::vector;
 
     using json = nlohmann::json;
 
@@ -64,11 +65,11 @@ namespace grok::core {
     }
 
     bool registry_contains (string command_origin, string package_name) {
-        return fs::exists(fs::path(command_origin) / ".." / "registry" / (package_name + ".grokpackage"));
+        return fs::exists(fs::path(command_origin) / "registry" / (package_name + ".grokpackage"));
     }
 
     json open_registered_package (string command_origin, string package_name) {
-        auto package_stream = ifstream(fs::path(command_origin) / ".." / "registry" / (package_name + ".grokpackage"));
+        auto package_stream = ifstream(fs::path(command_origin) / "registry" / (package_name + ".grokpackage"));
         stringstream package_json;
 
         package_json << package_stream.rdbuf();
@@ -142,22 +143,74 @@ namespace grok::core {
         file_stream << package.dump(4);
     }
 
-    string generate_cmake (string command_origin, json parent_package) {
+    string generate_cmake (const string& command_origin, const json& parent_package, const bool is_project = false) {
+        string parent_package_name = parent_package[ "package" ][ "name" ];
         stringstream cmake_source;
+
+        if (is_project) {
+            cmake_source << "project(" << parent_package_name << ")" << endl;
+            cmake_source << endl;
+        }
+
+        cmake_source << "# ==========: " << parent_package_name << " :==========" << endl;
+
+        if (parent_package.find("includes") != parent_package.end()) {
+            json includes = parent_package.at("includes");
+
+            cmake_source << "# - includes" << endl;
+
+            for (json::iterator include = includes.begin(); include != includes.end(); ++include) {
+                if (is_project) {
+                    cmake_source << "include_directories(" << fs::current_path() / include.value() << ")" << endl;
+                }
+                else {
+                    cmake_source << "include_directories(" << fs::current_path() / ".grok" / parent_package_name / include.value() << ")" << endl;
+                }
+            }
+        }
+
+        if (parent_package.find("libraries") != parent_package.end()) {
+            json libraries = parent_package.at("libraries");
+            vector<string> target_link_libraries;
+
+            cmake_source << "# - libraries" << endl;
+
+            for (json::iterator library = libraries.begin(); library != libraries.end(); ++library) {
+                target_link_libraries.emplace_back(library.key());
+
+                if (library.value() != nullptr) {
+                    cmake_source << "add_library(" << library.key() << " SHARED IMPORTED)" << endl;
+
+                    if (is_project) {
+                        cmake_source << "set_target_properties(" << library.key() << " PROPERTIES IMPORTED_LOCATION " << fs::current_path() / library.value() << ")" << endl;
+                    }
+                    else {
+                        cmake_source << "set_target_properties(" << library.key() << " PROPERTIES IMPORTED_LOCATION " << fs::current_path() / ".grok" / parent_package_name / library.value() << ")" << endl;
+                    }
+
+                }
+            }
+
+            cmake_source << "target_link_libraries(" << parent_package_name;
+
+            for (const string& target_link_library : target_link_libraries) {
+                cmake_source << " " << target_link_library;
+            }
+
+            cmake_source << ")" << endl;
+        }
 
         if (parent_package.find("dependencies") != parent_package.end()) {
             json dependencies = parent_package.at("dependencies");
 
             for (json::iterator dependency = dependencies.begin(); dependency != dependencies.end(); ++dependency) {
+                cmake_source << endl;
+
                 if (registry_contains(command_origin, dependency.key())) {
-                    json child_package = open_registered_package(command_origin, dependency.key());
-
-                    // append includes, libraries, flags? etc.
-
-                    cmake_source << generate_cmake(command_origin, child_package) << endl;
+                    cmake_source << generate_cmake(command_origin, open_registered_package(command_origin, dependency.key())) << endl;
                 }
                 else {
-
+                    cmake_source << "YOUR MUM" << endl;
                 }
             }
         }
