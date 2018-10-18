@@ -12,14 +12,15 @@
         "stdc++fs": null
     },
     "package": {
+        "executables": [
+            "grok/main.cpp"
+        ],
+        "flags": [
+            "pthread"
+        ],
         "name": "grok",
         "release": "master",
-        "repository": "https://github.com/fyrware/grok.git"
-    },
-    "scripts": {
-        "use": "scripts/build_libgit2.sh"
-    },
-    "sources": [
-        "grok/main.cpp"
-    ]
+        "repository": "https://github.com/fyrware/grok.git",
+        "standard": 17
+    }
 }
