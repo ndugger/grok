@@ -1,14 +1,4 @@
-```
-                                _
-                               //
-       ____    ____   ____    //
-      //  \\  //  \\ //  \\  //___
-     //   // //     //   // //\\  
-    //   // //     //   // //  \\ 
-    \\__// //      \\__// //    \\
-       //
-  \\__//
-```
+<img src=https://i.imgur.com/yv6bndF.png width=288/>
 
 # grok
 Git-based package manager for C++
