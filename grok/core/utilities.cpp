@@ -2,10 +2,8 @@
 
 # include <iostream>
 # include <experimental/filesystem>
-# include <fstream>
 # include <regex>
 # include <string>
-# include <vector>
 
 # include "git2/clone.h"
 # include "git2/global.h"
@@ -15,13 +13,9 @@
 namespace grok::core {
     using std::cout;
     using std::endl;
-    using std::ifstream;
-    using std::ofstream;
     using std::regex;
     using std::regex_replace;
     using std::string;
-    using std::stringstream;
-    using std::vector;
 
     using json = nlohmann::json;
 
