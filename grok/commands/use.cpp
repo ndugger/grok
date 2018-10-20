@@ -16,7 +16,6 @@
 
 namespace grok::commands {
     using std::string;
-    using std::tuple;
     using std::vector;
 
     using namespace nlohmann;
@@ -99,10 +98,6 @@ namespace grok::commands {
             }
         }
 
-        if (command_by_user) {
-            project::add(package_name, package_release);
-        }
-
         if (package.find("dependencies") != package.end()) {
             json package_dependencies = package.at("dependencies");
 
@@ -114,7 +109,11 @@ namespace grok::commands {
             }
         }
 
-        utilities::print("now using " + package_name);
+        if (command_by_user) {
+            project::add(package_name, package_release);
+            utilities::print("now using " + package_name);
+        }
+
         return utilities::uninitialize(0);
     }
 }
