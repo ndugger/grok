@@ -3,7 +3,9 @@
 # include <iostream>
 # include <experimental/filesystem>
 # include <regex>
+# include <sstream>
 # include <string>
+# include <vector>
 
 # include "git2/clone.h"
 # include "git2/global.h"
@@ -14,9 +16,12 @@ namespace grok::core {
     using std::cin;
     using std::cout;
     using std::endl;
+    using std::getline;
     using std::regex;
     using std::regex_replace;
     using std::string;
+    using std::stringstream;
+    using std::vector;
 
     using json = nlohmann::json;
 
@@ -57,8 +62,9 @@ namespace grok::core {
         }
 
         string input () {
+            cout << "> ";
             string characters;
-            cin >> characters;
+            getline(cin, characters);
             return characters;
         }
 
@@ -66,6 +72,18 @@ namespace grok::core {
             print("unrecognized command: " + command_name);
             print("try 'grok help' for a list of available commands");
             return 1;
+        }
+
+        vector<string> split (string characters, char delimiter = ' ') {
+            stringstream line(regex_replace(characters, regex("\\s"), ""));
+            vector<string> tokens;
+            string token;
+
+            while (getline(line, token, delimiter)) {
+                tokens.emplace_back(token);
+            }
+
+            return tokens;
         }
     }
 }

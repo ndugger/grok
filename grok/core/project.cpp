@@ -71,5 +71,16 @@ namespace grok::core {
 
             file_stream << package.dump(4);
         }
+
+        void save (string package_json) {
+
+            if (fs::exists(fs::current_path() / ".grokpackage")) {
+                fs::remove(fs::current_path() / ".grokpackage");
+            }
+
+            ofstream package(fs::current_path() / ".grokpackage");
+
+            package << package_json;
+        }
     }
 }

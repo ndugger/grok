@@ -28,7 +28,7 @@ namespace grok::commands {
 
             string overwrite = utilities::input();
 
-            if (!overwrite.empty() && overwrite.compare("y") > 0) {
+            if (!overwrite.empty() && overwrite != "y") {
                 return utilities::uninitialize(0);
             }
         }
@@ -48,8 +48,14 @@ namespace grok::commands {
         utilities::print("which c++ standard do you want to use? (ex: 17)");
         package_meta[ "standard" ] = utilities::input();
 
+        utilities::print("are there any flags you want to build with? (ex: pthread,foo)");
+        package_meta[ "flags" ] = utilities::split(utilities::input(), ',');
+
         package[ "package" ] = package_meta;
 
+        project::save(package.dump(4));
+
+        utilities::print("project created");
         return utilities::uninitialize(0);
     }
 }
