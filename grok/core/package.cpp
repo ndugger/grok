@@ -23,6 +23,10 @@ namespace grok::core {
 
     namespace package {
 
+        bool exists (string package_name) {
+            return fs::exists(fs::current_path() / ".grok" / package_name);
+        }
+
         void download (string package_name, string package_repository, string package_release) {
             git_clone_options clone_opts = GIT_CLONE_OPTIONS_INIT;
             clone_opts.checkout_branch = package_release.c_str();

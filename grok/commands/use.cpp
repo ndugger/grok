@@ -18,13 +18,13 @@ namespace grok::commands {
     using std::string;
     using std::vector;
 
-    using namespace nlohmann;
+    using json = nlohmann::json;
     using namespace grok::core;
 
     const int use (const bool& command_by_user, const vector<string>& command_arguments) {
 
         if (!project::exists()) {
-            utilities::print("project has not yet been initialized; run 'grok new' to get started");
+            utilities::print("project has not yet been initialized; run 'grok make' to get started");
             return utilities::uninitialize(1);
         }
 
@@ -35,23 +35,29 @@ namespace grok::commands {
 
         string package_name = (command_arguments.size() > 0) ? command_arguments.at(0) : "";
         string package_release = (command_arguments.size() > 1) ? command_arguments.at(1) : "";
-        string package_repository = "";
-
-        if (project::uses(package_name)) {
-            utilities::print(package_name + " is already being used; did you mean 'grok update " + package_name + "'?");
-            return utilities::uninitialize(1);
-        }
+        string package_repository;
 
         json package;
         json package_meta;
 
         if (registry::contains(package_name)) {
             package = registry::open(package_name);
+
+            if (package.find("package") == package.end()) {
+                utilities::print("malformed package file; missing 'package' field");
+                return utilities::uninitialize(1);
+            }
+
             package_meta = package.at("package");
+
+            if (package_meta.find("repository") == package_meta.end()) {
+                utilities::print("missing package repository");
+                return utilities::uninitialize(1);
+            }
 
             package_repository = package_meta.at("repository");
 
-            if (package_release.empty()) {
+            if (package_release.empty() && package_meta.find("release") != package_meta.end()) {
                 package_release = package_meta.at("release");
             }
 
@@ -59,8 +65,14 @@ namespace grok::commands {
                 package_release = "master";
             }
 
-            if (package_repository.empty()) {
-                utilities::print("missing package repository");
+            if (package::exists(package_name)) {
+
+                if (project::uses(package_name)) {
+                    utilities::print("project is already using " + package_name + "; did you mean 'update'?");
+                    return utilities::uninitialize(1);
+                }
+
+                utilities::print("dependency conflict: package already exists for " + package_name);
                 return utilities::uninitialize(1);
             }
 
@@ -73,29 +85,33 @@ namespace grok::commands {
                 package_release = "master";
             }
 
-            if (repository::exists(package_repository, package_release)) {
-
-                if (!repository::is_package()) {
-                    utilities::print("repository is missing or has invalid .grokpackage file");
-                    return utilities::uninitialize(1);
-                }
-
-                package = repository::open_package();
-                package_meta = package.at("package");
-
-                package_name = package_meta.at("name");
-
-                if (project::uses(package_name)) {
-                    utilities::print(package_name + " is already being used; did you mean 'grok update " + package_name + "'?");
-                    return utilities::uninitialize(1);
-                }
-
-                repository::save_package(package_name, package_release);
-            }
-            else {
+            if (!repository::exists(package_repository, package_release)) {
                 utilities::print("unable to clone repository @ " + package_repository + " | " + package_release);
                 return utilities::uninitialize(1);
             }
+
+            if (!repository::is_package()) {
+                utilities::print("repository is missing or has invalid .grokpackage file");
+                return utilities::uninitialize(1);
+            }
+
+            package = repository::open_package();
+            package_meta = package.at("package");
+
+            package_name = package_meta.at("name");
+
+            if (package::exists(package_name)) {
+
+                if (project::uses(package_name)) {
+                    utilities::print("project is already using " + package_name + "; did you mean 'update'?");
+                    return utilities::uninitialize(1);
+                }
+
+                utilities::print("dependency conflict: package already exists for " + package_name);
+                return utilities::uninitialize(1);
+            }
+
+            repository::save_package(package_name, package_release);
         }
 
         if (package.find("dependencies") != package.end()) {

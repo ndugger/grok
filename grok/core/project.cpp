@@ -36,7 +36,20 @@ namespace grok::core {
         }
 
         bool uses (string package_name) {
-            return false; // TODO
+            auto project_stream = ifstream(fs::current_path() / ".grokpackage");
+            stringstream project_json;
+
+            project_json << project_stream.rdbuf();
+
+            json project = json::parse(project_json);
+
+            if (project.find("dependencies") == project.end()) {
+                return false;
+            }
+
+            json project_dependencies = project.at("dependencies");
+
+            return (project_dependencies.find(package_name) != project_dependencies.end());
         }
 
         void add (string package_name, string package_release) {

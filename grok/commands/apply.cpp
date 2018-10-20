@@ -8,6 +8,7 @@
 # include "git2/repository.h"
 # include "nlohmann/json.hpp"
 
+# include "grok/core/generators/cmake.cpp"
 # include "grok/core/utilities.cpp"
 
 namespace grok::commands {
@@ -18,7 +19,7 @@ namespace grok::commands {
     using namespace nlohmann;
     using namespace grok::core;
 
-    int apply (const bool& command_by_user, const vector<string>& command_arguments) {
+    const int apply (const bool& command_by_user, const vector<string>& command_arguments) {
 
     }
 }

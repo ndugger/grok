@@ -11,6 +11,7 @@
 # include "nlohmann/json.hpp"
 
 namespace grok::core {
+    using std::cin;
     using std::cout;
     using std::endl;
     using std::regex;
@@ -52,7 +53,13 @@ namespace grok::core {
         }
 
         void print (const string& characters) {
-            cout << characters << endl;
+            cout << "[ grok ] " << characters << endl;
+        }
+
+        string input () {
+            string characters;
+            cin >> characters;
+            return characters;
         }
 
         int unrecognized (string command_name) {
