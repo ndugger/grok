@@ -1,13 +1,24 @@
 {
     "dependencies": {},
-    "includes": [],
-    "libraries": {},
+    "includes": [
+        ".",
+        "libraries/git2/include",
+        "libraries/json/single_include"
+    ],
+    "libraries": {
+        "git2": "libraries/git2/build/libgit2.so",
+        "stdc++fs": ""
+    },
     "package": {
-        "executables": [],
-        "flags": [],
-        "name": "",
-        "release": "",
-        "repository": "",
-        "standard": ""
+        "executables": [
+            "grok/main.cpp"
+        ],
+        "flags": [
+            "pthread"
+        ],
+        "name": "grok",
+        "release": "master",
+        "repository": "https://github.com/fyrware/grok.git",
+        "standard": "17"
     }
 }

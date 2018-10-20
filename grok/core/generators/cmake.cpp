@@ -91,7 +91,7 @@ namespace grok::core::generators {
             for (json::iterator library = libraries.begin(); library != libraries.end(); ++library) {
                 target_link_libraries.emplace_back(library.key());
 
-                if (library.value() != nullptr) {
+                if (!library.value().empty()) {
                     generated_cmake << "add_library(" << library.key() << " SHARED IMPORTED)" << endl;
 
                     if (is_root) {
@@ -100,7 +100,6 @@ namespace grok::core::generators {
                     else {
                         generated_cmake << "set_target_properties(" << library.key() << " PROPERTIES IMPORTED_LOCATION " << fs::current_path() / ".grok" / package_name / library.value() << ")" << endl;
                     }
-
                 }
             }
 
