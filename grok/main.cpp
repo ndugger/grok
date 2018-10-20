@@ -10,7 +10,7 @@
 # include "grok/commands/sync.cpp"
 # include "grok/commands/update.cpp"
 # include "grok/commands/use.cpp"
-# include "grok/core/unrecognized.cpp"
+# include "grok/core/utilities.cpp"
 
 namespace grok {
     using std::function;
@@ -21,7 +21,7 @@ namespace grok {
     using std::string;
     using std::vector;
 
-    using command = function<int(string, bool, vector<string>)>;
+    using command = function<int(bool, vector<string>)>;
 
     const map<string, command> command_map = {
         { "apply", commands::apply },
@@ -33,17 +33,16 @@ namespace grok {
     };
 
     const int execute (const vector<string>& arguments) {
-        const string command_origin = regex_replace(arguments.at(0), regex("grok(?:.exe)?$"), "..");
-        const bool command_by_user = true;
+        core::utilities::initialize(arguments.at(0));
 
         if (arguments.size() <= 1) {
-            return commands::help(command_origin, command_by_user, { });
+            return commands::help(true, { });
         }
 
         const string command_name = arguments.at(1);
 
         if (command_map.find(command_name) == command_map.end()) {
-            return core::unrecognized(command_name);
+            return core::utilities::unrecognized(command_name);
         }
 
         vector<string> command_arguments;
@@ -52,7 +51,7 @@ namespace grok {
             command_arguments.emplace_back(arguments.at(i + 2));
         }
 
-        return command_map.at(command_name)(command_origin, command_by_user, command_arguments);
+        return command_map.at(command_name)(true, command_arguments);
     }
 }
 

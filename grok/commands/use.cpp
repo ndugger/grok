@@ -1,7 +1,6 @@
 # pragma once
 
 # include <iostream>
-# include <regex>
 # include <string>
 # include <vector>
 
@@ -9,132 +8,113 @@
 # include "nlohmann/json.hpp"
 
 # include "grok/core/generators/cmake.cpp"
+# include "grok/core/project.cpp"
+# include "grok/core/package.cpp"
+# include "grok/core/registry.cpp"
+# include "grok/core/repository.cpp"
 # include "grok/core/utilities.cpp"
 
 namespace grok::commands {
     using std::string;
+    using std::tuple;
     using std::vector;
 
     using namespace nlohmann;
     using namespace grok::core;
 
-    const int use (const string& command_origin, const bool& command_by_user, const vector<string>& command_arguments) {
-        initialize();
+    const int use (const bool& command_by_user, const vector<string>& command_arguments) {
 
-        if (!project_exists()) {
-            display_message("project has not yet been initialized; run 'grok new' to get started");
-            uninitialize();
-
-            return 1;
+        if (!project::exists()) {
+            utilities::print("project has not yet been initialized; run 'grok new' to get started");
+            return utilities::uninitialize(1);
         }
 
         if (command_arguments.empty()) {
-            display_message("use what?");
-            uninitialize();
-
-            return 1;
+            utilities::print("use what?");
+            return utilities::uninitialize(1);
         }
 
-        string package_name = command_arguments.size() > 0 ? command_arguments[ 0 ] : "";
-        string package_release = command_arguments.size() > 1 ? command_arguments[ 1 ] : "";
+        string package_name = (command_arguments.size() > 0) ? command_arguments.at(0) : "";
+        string package_release = (command_arguments.size() > 1) ? command_arguments.at(1) : "";
+        string package_repository = "";
 
-        if (package_in_use(package_name)) {
-            display_message(package_name + " is already being used; did you mean 'grok update " + package_name + "'?");
-            uninitialize();
-
-            return 1;
+        if (project::uses(package_name)) {
+            utilities::print(package_name + " is already being used; did you mean 'grok update " + package_name + "'?");
+            return utilities::uninitialize(1);
         }
 
-        if (registry_contains(command_origin, package_name)) {
-            json registered_package = open_registered_package(command_origin, package_name);
-            string package_repository = registered_package[ "package" ][ "repository" ];
+        json package;
+        json package_meta;
+
+        if (registry::contains(package_name)) {
+            package = registry::open(package_name);
+            package_meta = package.at("package");
+
+            package_repository = package_meta.at("repository");
 
             if (package_release.empty()) {
-                package_release = registered_package[ "package" ][ "release" ];
+                package_release = package_meta.at("release");
             }
 
             if (package_release.empty()) {
                 package_release = "master";
             }
 
-            if (package_is_available(package_repository)) {
-                download_package(package_name, package_repository, package_release);
-
-                if (command_by_user) {
-                    add_dependency_to_project(package_name, package_release);
-                }
-
-                cout << generators::cmake(command_origin, open_project(), true) << endl;
-
-                json dependencies = registered_package[ "dependencies" ];
-
-                if (dependencies != nullptr) {
-                    for (json::iterator dependency = dependencies.begin(); dependency != dependencies.end(); ++dependency) {
-
-                        if (project_depends_on(dependency.key())) {
-                            continue;
-                        }
-
-                        use(command_origin, false, { dependency.key(), dependency.value() });
-                    }
-                }
-
-                display_message("now using " + package_name);
+            if (package_repository.empty()) {
+                utilities::print("missing package repository");
+                return utilities::uninitialize(1);
             }
-            else {
-                display_message("unable to clone repository @ " + package_repository + " | " + package_release);
-                uninitialize();
 
-                return 1;
-            }
+            package::download(package_name, package_repository, package_release);
         }
         else {
-            string package_repository = package_name;
+            package_repository = package_name;
 
             if (package_release.empty()) {
                 package_release = "master";
             }
 
-            git_repository* discovered_repository = discover_package(package_repository, package_release);
+            if (repository::exists(package_repository, package_release)) {
 
-            if (discovered_repository == nullptr) {
-                display_message("unable to clone repository @ " + package_repository + " | " + package_release);
-                uninitialize();
-
-                return 1;
-            }
-
-            json discovered_package = open_discovered_package();
-            string discovered_package_name = discovered_package[ "package" ][ "name" ];
-
-            package_name = discovered_package_name;
-
-            if (package_in_use(package_name)) {
-                display_message(package_name + " is already being used; did you mean 'grok update " + package_name + "'?");
-                uninitialize();
-
-                return 1;
-            }
-
-            save_discovered_package(package_name, package_release);
-
-            if (command_by_user) {
-                add_dependency_to_project(package_name, package_release);
-            }
-
-            json dependencies = discovered_package[ "dependencies" ];
-
-            if (dependencies != nullptr) {
-                for (json::iterator dependency = dependencies.begin(); dependency != dependencies.end(); ++dependency) {
-                    use(command_origin, false, { dependency.key(), dependency.value() });
+                if (!repository::is_package()) {
+                    utilities::print("repository is missing or has invalid .grokpackage file");
+                    return utilities::uninitialize(1);
                 }
-            }
 
-            display_message("now using " + package_name);
+                package = repository::open_package();
+                package_meta = package.at("package");
+
+                package_name = package_meta.at("name");
+
+                if (project::uses(package_name)) {
+                    utilities::print(package_name + " is already being used; did you mean 'grok update " + package_name + "'?");
+                    return utilities::uninitialize(1);
+                }
+
+                repository::save_package(package_name, package_release);
+            }
+            else {
+                utilities::print("unable to clone repository @ " + package_repository + " | " + package_release);
+                return utilities::uninitialize(1);
+            }
         }
 
-        uninitialize();
+        if (command_by_user) {
+            project::add(package_name, package_release);
+        }
 
-        return 0;
+        if (package.find("dependencies") != package.end()) {
+            json package_dependencies = package.at("dependencies");
+
+            for (json::iterator dependency = package_dependencies.begin(); dependency != package_dependencies.end(); ++dependency) {
+
+                if (!project::uses(dependency.key())) {
+                    use(false, { dependency.key(), dependency.value() });
+                }
+            }
+        }
+
+        utilities::print("now using " + package_name);
+        return utilities::uninitialize(0);
     }
 }

@@ -8,7 +8,8 @@
 
 # include "nlohmann/json.hpp"
 
-# include "grok/core/art.cpp"
+# include "grok/core/generators/art.cpp"
+# include "grok/core/registry.cpp"
 # include "grok/core/utilities.cpp"
 
 namespace grok::core::generators {
@@ -21,13 +22,13 @@ namespace grok::core::generators {
         namespace fs = std::experimental::filesystem;
     }
 
-    string cmake (const string command_origin, json package, bool is_root = false) {
+    string cmake (json package, bool is_root = false) {
         json package_meta = package.at("package");
         string package_name = package_meta.at("name");
 
         stringstream generated_cmake;
 
-        for (const string& line : core::logo_lines) {
+        for (const string& line : art()) {
             generated_cmake << "#  " << line << endl;
         }
 
@@ -118,8 +119,8 @@ namespace grok::core::generators {
             for (json::iterator dependency = dependencies.begin(); dependency != dependencies.end(); ++dependency) {
                 generated_cmake << endl;
 
-                if (registry_contains(command_origin, dependency.key())) {
-                    generated_cmake << generate_cmake(command_origin, open_registered_package(command_origin, dependency.key())) << endl;
+                if (registry::contains(dependency.key())) {
+                    generated_cmake << cmake(registry::open(dependency.key())) << endl;
                 }
                 else {
                     generated_cmake << "YOUR MUM" << endl;

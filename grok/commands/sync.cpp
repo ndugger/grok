@@ -7,7 +7,7 @@ namespace grok::commands {
 
     using namespace std;
 
-    int sync (const string& command_origin, const bool& command_by_user, const vector<string>& command_arguments) {
+    int sync (const bool& command_by_user, const vector<string>& command_arguments) {
         return 0;
     }
 }
