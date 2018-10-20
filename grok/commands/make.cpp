@@ -1,5 +1,6 @@
 # pragma once
 
+# include <map>
 # include <sstream>
 # include <string>
 # include <vector>
@@ -14,6 +15,7 @@
 # include "grok/core/utilities.cpp"
 
 namespace grok::commands {
+    using std::map;
     using std::string;
     using std::stringstream;
     using std::vector;
@@ -48,10 +50,28 @@ namespace grok::commands {
         utilities::print("which c++ standard do you want to use? (ex: 17)");
         package_meta[ "standard" ] = utilities::input();
 
-        utilities::print("are there any flags you want to build with? (ex: pthread,foo)");
+        utilities::print("are there any flags you want to build with? (ex: pthread,foo=1)");
         package_meta[ "flags" ] = utilities::split(utilities::input(), ',');
 
+        utilities::print("where are the executables? (ex: src/main.cpp,src/foo.cpp)");
+        package_meta[ "executables" ] = utilities::split(utilities::input(), ',');
+
         package[ "package" ] = package_meta;
+
+        utilities::print("what should the 'include' directories be? (ex: foo/,bar/");
+        package[ "includes" ] = utilities::split(utilities::input(), ',');
+
+        utilities::print("are there any libraries you need? (ex: stdc++fs,foo=libs/foo.so)");
+        package[ "libraries" ] = map<string, string>();
+
+        const vector<string> pairs = utilities::split(utilities::input(), ',');
+
+        for (string library : pairs) {
+            const vector<string> pair = utilities::split(library, '=');
+            package[ "libraries" ][ pair.front() ] = (pair.size() > 1) ? pair.back() : "";
+        }
+
+        package[ "dependencies" ] = map<string, string>();
 
         project::save(package.dump(4));
 

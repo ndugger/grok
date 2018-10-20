@@ -1,5 +1,9 @@
 {
+    "dependencies": {},
+    "includes": [],
+    "libraries": {},
     "package": {
+        "executables": [],
         "flags": [],
         "name": "",
         "release": "",
