@@ -9,9 +9,6 @@
 
 # include "grok/core/generators/cmake.cpp"
 # include "grok/core/project.cpp"
-# include "grok/core/package.cpp"
-# include "grok/core/registry.cpp"
-# include "grok/core/repository.cpp"
 # include "grok/core/utilities.cpp"
 
 namespace grok::commands {
@@ -74,6 +71,7 @@ namespace grok::commands {
         package[ "dependencies" ] = map<string, string>();
 
         project::save(package.dump(4));
+        project::apply(generators::cmake(package));
 
         utilities::print("project created");
         return utilities::uninitialize(0);

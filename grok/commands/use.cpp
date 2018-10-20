@@ -97,7 +97,6 @@ namespace grok::commands {
 
             package = repository::open_package();
             package_meta = package.at("package");
-
             package_name = package_meta.at("name");
 
             if (package::exists(package_name)) {
@@ -125,11 +124,14 @@ namespace grok::commands {
             }
         }
 
-        if (command_by_user) {
-            project::add(package_name, package_release);
-            utilities::print("now using " + package_name);
+        if (!command_by_user) {
+            return 0;
         }
 
+        project::add(package_name, package_release);
+        project::apply(generators::cmake(project::open()));
+
+        utilities::print("now using " + package_name);
         return utilities::uninitialize(0);
     }
 }

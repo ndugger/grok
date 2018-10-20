@@ -78,9 +78,20 @@ namespace grok::core {
                 fs::remove(fs::current_path() / ".grokpackage");
             }
 
-            ofstream package(fs::current_path() / ".grokpackage");
+            ofstream grokpackage(fs::current_path() / ".grokpackage");
 
-            package << package_json;
+            grokpackage << package_json;
+        }
+
+        void apply (string generated_code) {
+
+            if (fs::exists(fs::current_path() / ".grokmake")) {
+                fs::remove(fs::current_path() / ".grokmake");
+            }
+
+            ofstream grokmake(fs::current_path() / ".grokmake");
+
+            grokmake << generated_code;
         }
     }
 }
