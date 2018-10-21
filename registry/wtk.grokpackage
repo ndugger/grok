@@ -1,17 +1,20 @@
 {
+    "dependencies": {
+        "fusion": "master"
+    },
+    "includes": [
+        "."
+    ],
     "package": {
-        "name": "wtk",
-        "release": "master",
-        "repository": "https://github.com/fyrware/wtk.git",
-        "standard": "17",
+        "executables": [
+            "wtk/main.cpp"
+        ],
         "flags": [
             "pthread"
         ],
-        "include": [
-            "."
-        ]
-    },
-    "dependencies": {
-        "fusion": "master"
+        "name": "wtk",
+        "release": "master",
+        "repository": "https://github.com/fyrware/wtk.git",
+        "standard": "17"
     }
 }

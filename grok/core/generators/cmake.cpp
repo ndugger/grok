@@ -16,7 +16,7 @@ namespace grok::core::generators {
     using std::endl;
     using std::string;
     using std::stringstream;
-    using namespace nlohmann;
+    using json = nlohmann::json;
 
     namespace {
         namespace fs = std::experimental::filesystem;
