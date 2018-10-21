@@ -1,4 +1,5 @@
 .idea/
 .grok/
 cmake-build-debug/
+binary/
 CMakeLists.txt

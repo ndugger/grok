@@ -129,7 +129,7 @@ namespace grok::commands {
         }
 
         project::add(package_name, package_release);
-        project::apply(generators::cmake(project::open()));
+        project::apply(generators::cmake(project::open(), true));
 
         utilities::print("now using " + package_name);
         return utilities::uninitialize(0);

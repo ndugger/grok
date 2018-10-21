@@ -19,7 +19,7 @@ namespace grok::commands {
     using namespace grok::core;
 
     const int apply (const bool& command_by_user, const vector<string>& command_arguments) {
-        project::apply(generators::cmake(project::open()));
+        project::apply(generators::cmake(project::open(), true));
         utilities::print("project applied");
         return utilities::uninitialize(0);
     }

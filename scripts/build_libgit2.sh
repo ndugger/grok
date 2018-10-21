@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-cd libraries/git2
+cd libraries/git2/
 
 mkdir build/
 cd build/

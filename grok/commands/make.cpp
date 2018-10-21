@@ -71,7 +71,7 @@ namespace grok::commands {
         package[ "dependencies" ] = map<string, string>();
 
         project::save(package.dump(4));
-        project::apply(generators::cmake(package));
+        project::apply(generators::cmake(package, true));
 
         utilities::print("project created");
         return utilities::uninitialize(0);
