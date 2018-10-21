@@ -8,8 +8,11 @@ In order to install `grok`, simply run the correct install script for your OS:
 
 - linux: [install_linux.sh](https://github.com/fyrware/grok/blob/master/scripts/install_linux.sh)
 
-### commands
+Prerequisites:
+- git
+- cmake
 
+### commands
 - **make:** `> grok make`
 
   The `make` command is used to create a new package (project). It will ask you a series of questions that it will use 
