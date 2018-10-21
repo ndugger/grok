@@ -3,7 +3,7 @@
 # grok
 Git-based package manager for C++
 
-### install
+### how to install
 In order to install `grok`, simply run the correct install script for your OS:
 
 - linux: [install_linux.sh](https://github.com/fyrware/grok/blob/master/scripts/install_linux.sh)
@@ -40,3 +40,11 @@ In order to install `grok`, simply run the correct install script for your OS:
 - **help**
 
   This `help` command will essentially just regurgitate this.
+  
+### package registry
+The registry of packages is [currently] hosted with the source code. If you would like to add your package to the 
+registry, simply fork grok, add your `.grokpackage` file, and open a pull-request back into the original repository.
+
+### why another package manager?
+This was my first C++ project. It felt like the perfect size and complexity to get my proverbial feet wet. This is not 
+intended for production use (though admittedly, I probably will).
