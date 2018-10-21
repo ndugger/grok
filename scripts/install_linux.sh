@@ -17,6 +17,6 @@ cd binary/
 cmake ..
 cmake --build . --target all --clean-first
 
-echo "\n" >> ~/.bashrc
+echo -e "\n" >> ~/.bashrc
 echo "PATH=\"\$PATH:/opt/grok/binary\"" >> ~/.bashrc
 source ~/.bashrc

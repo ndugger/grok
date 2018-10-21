@@ -89,16 +89,19 @@ namespace grok::core::generators {
             generated_cmake << "# - libraries" << endl;
 
             for (json::iterator library = libraries.begin(); library != libraries.end(); ++library) {
+                const string key = library.key();
+                const string value = library.value();
+
                 target_link_libraries.emplace_back(library.key());
 
-                if (!library.value().empty()) {
-                    generated_cmake << "add_library(" << library.key() << " SHARED IMPORTED)" << endl;
+                if (!value.empty()) {
+                    generated_cmake << "add_library(" << key << " SHARED IMPORTED)" << endl;
 
                     if (is_root) {
-                        generated_cmake << "set_target_properties(" << library.key() << " PROPERTIES IMPORTED_LOCATION " << fs::current_path() / library.value() << ")" << endl;
+                        generated_cmake << "set_target_properties(" << key << " PROPERTIES IMPORTED_LOCATION " << fs::current_path() / value << ")" << endl;
                     }
                     else {
-                        generated_cmake << "set_target_properties(" << library.key() << " PROPERTIES IMPORTED_LOCATION " << fs::current_path() / ".grok" / package_name / library.value() << ")" << endl;
+                        generated_cmake << "set_target_properties(" << key << " PROPERTIES IMPORTED_LOCATION " << fs::current_path() / ".grok" / package_name / value << ")" << endl;
                     }
                 }
             }
