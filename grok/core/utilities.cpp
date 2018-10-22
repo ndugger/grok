@@ -7,6 +7,7 @@
 # include <string>
 # include <vector>
 
+# include "stdlib.h"
 # include "git2/clone.h"
 # include "git2/global.h"
 # include "git2/repository.h"
@@ -21,6 +22,7 @@ namespace grok::core {
     using std::regex_replace;
     using std::string;
     using std::stringstream;
+    using std::system;
     using std::vector;
 
     using json = nlohmann::json;
@@ -37,7 +39,7 @@ namespace grok::core {
             return location;
         }
 
-        void initialize (string program_name) {
+        void initialize (const string& program_name) {
             location = regex_replace(program_name, regex("grok(?:.exe)?$"), "..");
 
             git_libgit2_init();
@@ -47,7 +49,7 @@ namespace grok::core {
             }
         }
 
-        int uninitialize (int code) {
+        int uninitialize (const int code) {
             git_libgit2_shutdown();
 
             if (fs::exists(fs::temp_directory_path() / ".groktemp")) {
@@ -68,13 +70,13 @@ namespace grok::core {
             return characters;
         }
 
-        int unrecognized (string command_name) {
+        int unrecognized (const string& command_name) {
             print("unrecognized command: " + command_name);
             print("try 'grok help' for a list of available commands");
             return 1;
         }
 
-        vector<string> split (string characters, char delimiter = ' ') {
+        vector<string> split (const string& characters, const char delimiter = ' ') {
             stringstream line(regex_replace(characters, regex("\\s"), ""));
             vector<string> tokens;
             string token;
@@ -84,6 +86,10 @@ namespace grok::core {
             }
 
             return tokens;
+        }
+
+        void call_script (const string& script_name) {
+            system((fs::path(location) / "scripts" / script_name).string().c_str());
         }
     }
 }

@@ -35,12 +35,12 @@ Prerequisites:
 
 ---
 
-- **sync**
+- **sync:** `> sudo grok sync`
 
   The `sync` command will pull down the registry from grok's source. This updates your local registry to be aware of any 
-  potentially new packages that have been added.
+  potentially new packages that may have been added.
 
-- **help**
+- **help:** `> grok help`
 
   This `help` command will essentially just regurgitate this.
   

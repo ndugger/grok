@@ -3,11 +3,17 @@
 # include <string>
 # include <vector>
 
-namespace grok::commands {
+# include "grok/core/utilities.cpp"
 
-    using namespace std;
+namespace grok::commands {
+    using std::string;
+    using std::vector;
+
+    using namespace grok::core;
 
     int sync (const bool& command_by_user, const vector<string>& command_arguments) {
-        return 0;
+        utilities::call_script("sync_registry.sh");
+        utilities::print("synced");
+        return utilities::uninitialize(0);
     }
 }
