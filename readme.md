@@ -1,4 +1,6 @@
-<img src=https://i.imgur.com/yv6bndF.png width=288/>
+<p align=center>
+    <img src=https://i.imgur.com/yv6bndF.png width=288/>
+</p>
 
 # grok
 Git-based package manager for C++
