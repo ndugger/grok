@@ -88,8 +88,8 @@ namespace grok::core {
             return tokens;
         }
 
-        void call_script (const string& script_name) {
-            system((fs::path(location) / "scripts" / script_name).string().c_str());
+        void call_script (const string& script_name, const string& arguments = "") {
+            system(((fs::path(location) / "scripts" / script_name).string() + " " + arguments).c_str());
         }
     }
 }
