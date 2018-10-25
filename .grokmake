@@ -24,18 +24,3 @@ include_directories("/home/nick/Projects/fyrware/grok/libraries/json/single_incl
 add_library(git2 SHARED IMPORTED)
 set_target_properties(git2 PROPERTIES IMPORTED_LOCATION "/home/nick/Projects/fyrware/grok/libraries/git2/build/libgit2.so")
 target_link_libraries(grok git2 stdc++fs)
-
-#                                _
-#                               //
-#       ____    ____   ____    //
-#      //  \\  //  \\ //  \\  //___
-#     //   // //     //   // //\\
-#    //   // //     //   // //  \\
-#    \\__// //      \\__// //    \\
-#       //  PACKAGE MANAGER
-#  \\__//
-
-# ==========: fusion :==========
-# - includes:
-include_directories("/home/nick/Projects/fyrware/grok/.grok/fusion/.")
-

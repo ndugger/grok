@@ -2,6 +2,7 @@
 
 # include <iostream>
 # include <experimental/filesystem>
+# include <fstream>
 # include <regex>
 # include <sstream>
 # include <string>
@@ -13,11 +14,14 @@
 # include "git2/repository.h"
 # include "nlohmann/json.hpp"
 
+# include "grok/configuration/settings.cpp"
+
 namespace grok::core {
     using std::cin;
     using std::cout;
     using std::endl;
     using std::getline;
+    using std::ifstream;
     using std::regex;
     using std::regex_replace;
     using std::string;
@@ -25,22 +29,23 @@ namespace grok::core {
     using std::system;
     using std::vector;
 
+    using namespace grok::configuration;
     using json = nlohmann::json;
 
     namespace {
         namespace fs = std::experimental::filesystem;
 
-        string location;
+        fs::path location;
     }
 
     namespace utilities {
 
-        string get_location () {
+        fs::path get_location () {
             return location;
         }
 
         void initialize (const string& program_name) {
-            location = regex_replace(program_name, regex("grok(?:.exe)?$"), "..");
+            location = fs::path(get_setting("install_location", false)) / "grok";
 
             git_libgit2_init();
 
@@ -89,7 +94,7 @@ namespace grok::core {
         }
 
         void call_script (const string& script_name, const string& arguments = "") {
-            system(((fs::path(location) / "scripts" / script_name).string() + " " + arguments).c_str());
+            system(((location / "scripts" / script_name).string() + " " + arguments).c_str());
         }
     }
 }

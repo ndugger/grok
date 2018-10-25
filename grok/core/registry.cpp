@@ -23,11 +23,11 @@ namespace grok::core {
     namespace registry {
 
         bool contains (string package_name) {
-            return fs::exists(fs::path(utilities::get_location()) / "registry" / (package_name + ".grokpackage"));
+            return fs::exists(utilities::get_location() / "registry" / (package_name + ".grokpackage"));
         }
 
         json open (string package_name) {
-            auto package_stream = ifstream(fs::path(utilities::get_location()) / "registry" / (package_name + ".grokpackage"));
+            auto package_stream = ifstream(utilities::get_location() / "registry" / (package_name + ".grokpackage"));
             stringstream package_json;
 
             package_json << package_stream.rdbuf();
