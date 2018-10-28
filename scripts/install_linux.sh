@@ -8,6 +8,7 @@ git clone --recurse-submodules https://github.com/fyrware/grok.git
 cd grok/
 git checkout
 git fetch
+chmod 777 . -R
 
 #### build libgit2
 cd libraries/git2/
