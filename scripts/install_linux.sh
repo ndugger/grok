@@ -6,7 +6,7 @@ cd /opt/
 #### download grok source files
 git clone --recurse-submodules https://github.com/fyrware/grok.git
 cd grok/
-git fetch
+sudo git fetch
 chmod +rwx grok/ -R
 
 #### build libgit2
