@@ -1,0 +1,19 @@
+{
+    "dependencies": {},
+    "includes": [
+        "asio/include/"
+    ],
+    "libraries": {},
+    "package": {
+        "executables": [
+            "asio/src/asio.cpp"
+        ],
+        "flags": [
+            "pthread"
+        ],
+        "name": "asio",
+        "release": "asio-1-12-0",
+        "repository": "https://github.com/chriskohlhoff/asio",
+        "standard": "17"
+    }
+}
