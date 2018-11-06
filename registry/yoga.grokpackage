@@ -1,0 +1,26 @@
+{
+    "dependencies": {},
+    "includes": [
+        "."
+    ],
+    "libraries": {},
+    "package": {
+        "executables": [
+            "yoga/Utils.cpp",
+            "yoga/YGConfig.cpp",
+            "yoga/YGEnums.cpp",
+            "yoga/YGFloatOptional.cpp",
+            "yoga/YGLayout.cpp",
+            "yoga/YGMacros.cpp",
+            "yoga/YGNode.cpp",
+            "yoga/YGNodePrint.cpp",
+            "yoga/YGStyle.cpp",
+            "yoga/Yoga.cpp"
+        ],
+        "flags": [],
+        "name": "yoga",
+        "release": "v1.10.0",
+        "repository": "https://github.com/facebook/yoga.git",
+        "standard": "14"
+    }
+}
