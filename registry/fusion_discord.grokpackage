@@ -1,0 +1,10 @@
+{
+    "includes": [
+        "."
+    ],
+    "package": {
+        "name": "fusion_discord",
+        "release": "master",
+        "repository": "https://github.com/fyrware/fusion_discord.git"
+    }
+}
