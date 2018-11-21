@@ -1,0 +1,15 @@
+{
+    "dependencies": {},
+    "includes": [
+        "."
+    ],
+    "libraries": {},
+    "package": {
+        "executables": [],
+        "flags": [],
+        "name": "websocketpp",
+        "release": "0.8.1",
+        "repository": "https://github.com/zaphoyd/websocketpp.git",
+        "standard": "11"
+    }
+}
