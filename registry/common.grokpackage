@@ -1,0 +1,16 @@
+
+{
+    "dependencies": {},
+    "includes": [
+        "."
+    ],
+    "libraries": {},
+    "package": {
+        "executables": [],
+        "flags": [],
+        "name": "common",
+        "release": "master",
+        "repository": "https://github.com/fyrware/common.git",
+        "standard": "17"
+    }
+}
