@@ -1,60 +1,20 @@
-# include <functional>
-# include <map>
-# include <regex>
 # include <string>
 # include <vector>
 
-# include "grok/commands/apply.cpp"
-# include "grok/commands/help.cpp"
-# include "grok/commands/make.cpp"
-# include "grok/commands/sync.cpp"
-# include "grok/commands/update.cpp"
-# include "grok/commands/use.cpp"
-# include "grok/core/utilities.cpp"
+# include "common/program.cpp"
 
 namespace grok {
-    using std::function;
-    using std::map;
-    using std::regex;
-    using std::regex_replace;
-    using std::size_t;
-    using std::string;
-    using std::vector;
 
-    using command = function<int(bool, vector<string>)>;
+    int main (std::vector<std::string> arguments) {
+        common::program cli;
 
-    const map<string, command> command_map = {
-        { "apply", commands::apply },
-        { "help", commands::help },
-        { "make", commands::make },
-        { "sync", commands::sync },
-        { "update", commands::update },
-        { "use", commands::use }
-    };
+        cli.start();
 
-    const int execute (const vector<string>& arguments) {
-        core::utilities::initialize(arguments.at(0));
-
-        if (arguments.size() <= 1) {
-            return commands::help(true, { });
-        }
-
-        const string command_name = arguments.at(1);
-
-        if (command_map.find(command_name) == command_map.end()) {
-            return core::utilities::unrecognized(command_name);
-        }
-
-        vector<string> command_arguments;
-
-        for (size_t i = 0; i < arguments.size() - 2; ++i) {
-            command_arguments.emplace_back(arguments.at(i + 2));
-        }
-
-        return command_map.at(command_name)(true, command_arguments);
+        while (cli.running());
+        return cli.status();
     }
 }
 
-int main (int argument_count, char* argument_values[]) {
-    return grok::execute(std::vector<std::string>(argument_values, argument_values + argument_count));
+int main (int arguments_size, char* arguments_values[]) {
+    return grok::main(std::vector<std::string>(arguments_values, arguments_values + arguments_size));
 }

@@ -5,3 +5,9 @@
 [submodule "libraries/git2"]
 	path = libraries/git2
 	url = https://github.com/libgit2/libgit2.git
+[submodule "libraries/fusion"]
+	path = libraries/fusion
+	url = https://github.com/fyrware/fusion.git
+[submodule "libraries/common"]
+	path = libraries/common
+	url = https://github.com/fyrware/common.git
