@@ -1,17 +1,25 @@
+# include <iostream>
 # include <string>
 # include <vector>
 
-# include "common/program.cpp"
+# include "grok/cli/command.cpp"
+# include "grok/cli/initialize.cpp"
+# include "reactor/core.cpp"
 
 namespace grok {
 
     int main (std::vector<std::string> arguments) {
-        common::program cli;
+        const std::string command_name = arguments.size() > 1 ? arguments.at(1) : "";
+        const std::string package_name = arguments.size() > 2 ? arguments.at(2) : "";
 
-        cli.start();
+        reactor::core application({
+            cli::initialize(command_name, package_name)
+        });
 
-        while (cli.running());
-        return cli.status();
+        application.start();
+
+        while (application.running());
+        return application.status();
     }
 }
 

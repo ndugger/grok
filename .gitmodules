@@ -8,6 +8,6 @@
 [submodule "libraries/fusion"]
 	path = libraries/fusion
 	url = https://github.com/fyrware/fusion.git
-[submodule "libraries/common"]
-	path = libraries/common
-	url = https://github.com/fyrware/common.git
+[submodule "libraries/reactor"]
+	path = libraries/reactor
+	url = https://github.com/fyrware/reactor.git

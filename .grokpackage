@@ -2,10 +2,10 @@
     "dependencies": {},
     "includes": [
         ".",
-        "libraries/common",
         "libraries/fusion",
         "libraries/git2/include",
-        "libraries/json/single_include"
+        "libraries/json/single_include",
+        "libraries/reactor"
     ],
     "libraries": {
         "git2": "libraries/git2/build/libgit2.so",
