@@ -1,20 +1,23 @@
 # pragma once
 
+# include <iostream>
 # include <functional>
 # include <string>
 
+# include "grok/cli/command.cpp"
 # include "reactor/core.cpp"
 # include "reactor/event.cpp"
 
-# include "grok/cli/command.cpp"
-
 namespace grok::cli {
 
-    std::function<void(reactor::core&)> initialize (const std::string& command_name, const std::string& package_name) {
-        return [ command_name, package_name ] (reactor::core& application) {
-            application.observe("start").for_each([ & ] (reactor::event* event) {
+    void initialize (reactor::core& application) {
+        application.observe("command").cast<command*>().for_each([ &application ] (command* cmd) {
+            std::string command_name = cmd->name();
+            std::string command_target = cmd->target();
 
-            });
-        };
+            std::cout << command_name << " -> " << command_target << std::endl;
+
+            application.shutdown();
+        });
     }
 }
