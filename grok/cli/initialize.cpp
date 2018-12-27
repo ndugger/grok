@@ -5,6 +5,7 @@
 # include <string>
 
 # include "grok/cli/command.cpp"
+# include "grok/cmd/use.cpp"
 # include "reactor/core.cpp"
 # include "reactor/event.cpp"
 
@@ -15,7 +16,9 @@ namespace grok::cli {
             std::string command_name = cmd->name();
             std::string command_target = cmd->target();
 
-            std::cout << command_name << " -> " << command_target << std::endl;
+            if (command_name == "use") {
+                cmd::use(command_target);
+            }
 
             application.shutdown();
         });

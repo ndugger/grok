@@ -2,6 +2,7 @@
 # include <string>
 # include <vector>
 
+# include "git2.h"
 # include "grok/cli/command.cpp"
 # include "grok/cli/initialize.cpp"
 # include "reactor/core.cpp"

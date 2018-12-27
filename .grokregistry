@@ -1,4 +1,4 @@
 {
     "name": "default",
-    "location": "registry/"
+    "directory": "registry/"
 }

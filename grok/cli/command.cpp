@@ -13,7 +13,6 @@ namespace grok::cli {
             std::string command_name;
             std::string command_target;
 
-
         public:
             explicit command (const std::string& name, const std::string& target) : reactor::event("command") {
                 command_name = name;
