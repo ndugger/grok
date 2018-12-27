@@ -1,12 +1,12 @@
 # pragma once
 
-# include <iostream>
 # include <string>
 
 # include "grok/lib/configuration.cpp"
 # include "grok/lib/package.cpp"
 # include "grok/lib/registry.cpp"
 # include "grok/util/json.cpp"
+# include "grok/util/print.cpp"
 
 namespace grok::cmd {
 
@@ -15,7 +15,7 @@ namespace grok::cmd {
         lib::package package(package_name);
 
         if (package.exists()) {
-            std::cout << "package already exists; did you mean \"grok update " << package_name << "\"?" << std::endl;
+            util::print("package already exists; did you mean \"grok update " + package_name + "\"?");
             return;
         }
 
@@ -32,6 +32,6 @@ namespace grok::cmd {
             }
         }
 
-        std::cout << "now using " << package_name << std::endl;
+        util::print("now using " + package_name);
     }
 }

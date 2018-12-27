@@ -6,6 +6,7 @@
 
 # include "grok/cli/command.cpp"
 # include "grok/cmd/use.cpp"
+# include "grok/util/print.cpp"
 # include "reactor/core.cpp"
 # include "reactor/event.cpp"
 
