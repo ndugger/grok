@@ -11,6 +11,17 @@
 namespace grok::cmd {
 
     void use (const std::string& package_name) {
+
+        if (!lib::package().exists()) {
+            util::print("project has not yet been initialized; run \"grok create\" to get started");
+            return;
+        }
+
+        if (package_name.empty()) {
+            util::print("use what?");
+            return;
+        }
+
         lib::configuration configuration;
         lib::package package(package_name);
 
