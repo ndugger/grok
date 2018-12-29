@@ -1,0 +1,19 @@
+
+{
+    "dependencies": {},
+    "includes": [
+        "include"
+    ],
+    "libraries": {},
+    "package": {
+        "executables": [
+            "src/format.cc",
+            "src/posix.cc"
+        ],
+        "flags": [],
+        "name": "fmt",
+        "release": "5.2.1",
+        "repository": "https://github.com/fmtlib/fmt.git",
+        "standard": "11"
+    }
+}
