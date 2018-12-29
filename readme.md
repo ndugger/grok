@@ -8,7 +8,7 @@ Git-based package manager for C++
 ### how to install
 In order to install `grok`, simply run the correct install script for your OS:
 
-- linux: [install_linux.sh](https://github.com/fyrware/grok/blob/master/scripts/install_linux.sh)
+- [Linux](https://github.com/fyrware/grok/wiki/Linux-Installation)
 
 Prerequisites:
 - git
