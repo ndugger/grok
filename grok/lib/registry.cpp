@@ -21,7 +21,7 @@ namespace grok::lib {
             util::json registry_json;
 
         public:
-            explicit registry (fs::path directory) {
+            explicit registry (const fs::path& directory) {
                 std::ifstream registry_stream(directory / ".grokregistry");
                 std::stringstream registry_string;
 
@@ -39,13 +39,17 @@ namespace grok::lib {
                 return fs::exists(registry_directory / (package.name() + ".grokpackage"));
             }
 
-            util::json open (lib::package& package) {
+            bool open (lib::package& package) {
                 std::ifstream package_stream(registry_directory / (package.name() + ".grokpackage"));
                 std::stringstream package_string;
 
                 package_string << package_stream.rdbuf();
 
-                return util::json::parse(package_string);
+                util::json package_json(util::json::parse(package_string));
+
+                package.overwrite(package_json);
+
+                return true;
             }
     };
 }

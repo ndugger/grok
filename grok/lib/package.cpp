@@ -17,31 +17,25 @@ namespace grok::lib {
     class package {
 
         private:
+            util::json package_json;
             std::string package_name;
             std::string package_release;
-            std::string package_repository;
 
         public:
-            explicit package (const std::string& name = ".", const std::string& release = "master") {
+            explicit package (const std::string& name, const std::string& release = "master") {
                 package_name = name;
                 package_release = release;
+            }
 
-                if (name == ".") {
-                    std::ifstream package_stream(fs::current_path() / ".grokpackage");
-                    std::stringstream package_string;
+            ~ package () {
+                save();
+            }
 
-                    package_string << package_stream.rdbuf();
-
-                    load(util::json::parse(package_string));
-                }
+            util::json operator [ ] (const std::string& key) {
+                return package_json[ key ];
             }
 
             bool exists () {
-
-                if (package_name == ".") {
-                    return fs::exists(fs::current_path() / ".grokpackage");
-                }
-
                 return fs::exists(fs::current_path() / ".grok" / package_name);
             }
 
@@ -53,16 +47,25 @@ namespace grok::lib {
                 return package_release;
             }
 
-            void load (util::json json) {
-                package_release = json[ "package" ][ "release" ];
-                package_repository = json[ "package" ][ "repository" ];
+            bool valid () {
+                return true;
             }
 
-            void download () {
-                util::repository repository(package_repository);
+            void overwrite (util::json json) {
+                package_json = json;
+            }
+
+            bool save () {
+                return true;
+            }
+
+            bool download () {
+                util::repository repository(package_json[ "package" ][ "repository" ]);
 
                 repository.clone(fs::current_path() / ".grok" / package_name);
                 repository.checkout(package_release);
+
+                return true;
             }
     };
 }

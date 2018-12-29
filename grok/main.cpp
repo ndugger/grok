@@ -5,6 +5,7 @@
 # include "grok/cli/command.cpp"
 # include "grok/cli/initialize.cpp"
 # include "reactor/core.cpp"
+# include "reactor/event.cpp"
 
 namespace grok {
 
@@ -14,8 +15,11 @@ namespace grok {
 
         reactor::core application({ cli::initialize });
 
+        application.observe("start").for_each([ & ] (reactor::event* e) {
+            application.emit("command", new cli::command(command_name, command_target));
+        });
+
         application.start();
-        application.emit("command", new cli::command(command_name, command_target));
 
         while (application.running());
         return application.status();

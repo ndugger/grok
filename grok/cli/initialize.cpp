@@ -17,11 +17,16 @@ namespace grok::cli {
             std::string command_name = cmd->name();
             std::string command_target = cmd->target();
 
-            if (command_name == "use") {
-                cmd::use(command_target);
+            try {
+                if (command_name == "use") {
+                    cmd::use(command_target);
+                }
+            }
+            catch (int code) {
+                application.shutdown(code);
             }
 
-            application.shutdown();
+            application.shutdown(0);
         });
     }
 }

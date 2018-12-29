@@ -63,7 +63,11 @@ namespace grok::lib {
                         configuration_options[ "registries" ] = config_json[ "registries" ];
                     }
                 }
-            };
+            }
+
+            ~ configuration () {
+                option("");
+            }
 
             util::json option (const std::string& name, bool agnostic = true) {
                 if (agnostic) {
