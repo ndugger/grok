@@ -21,10 +21,6 @@ namespace grok::lib {
                  // read .grokpackage file
             }
 
-            ~ project () {
-                exists();
-            }
-
             bool exists () {
                 return fs::exists(fs::current_path() / ".grokpackage");
             }

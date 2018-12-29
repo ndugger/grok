@@ -5,7 +5,7 @@
 
 namespace grok::util {
 
-    void print (const std::string& message, bool decorative = true) {
-        std::cout << (decorative ? "grok | " : "") << message << std::endl;
+    void print (const std::string& message) {
+        std::cout << message << std::endl;
     }
 }

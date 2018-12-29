@@ -25,10 +25,6 @@ namespace grok::util {
                 repository_git_repository = nullptr;
             }
 
-            ~ repository () {
-                checkout("");
-            }
-
             void clone (const fs::path& directory) {
                 git_clone_options clone_options = GIT_CLONE_OPTIONS_INIT;
                 git_clone(&repository_git_repository, repository_address.c_str(), directory.c_str(), &clone_options);

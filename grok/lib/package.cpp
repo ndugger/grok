@@ -27,10 +27,6 @@ namespace grok::lib {
                 package_release = release;
             }
 
-            ~ package () {
-                save();
-            }
-
             util::json operator [ ] (const std::string& key) {
                 return package_json[ key ];
             }

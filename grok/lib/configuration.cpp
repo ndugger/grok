@@ -17,12 +17,15 @@ namespace grok::lib {
         private:
             util::json configuration_options = {
                 { "install_directory",
-                    {
-                        { "linux", "/opt/grok" },
-                        { "mac", "/usr/bin/grok" },
-                        { "unix", "" },
-                        { "windows", "\\Program Files\\grok" }
-                    }
+                    # ifdef __linux__
+                        "/opt/grok"
+                    # elif __APPLE__
+                        "/usr/bin/grok"
+                    # elif __unix__
+                        ""
+                    # elif _WIN32
+                        "\\Program Files\\grok"
+                    # endif
                 },
                 { "registries",
                     {
@@ -38,16 +41,6 @@ namespace grok::lib {
                     }
                 }
             };
-
-            # ifdef __linux__
-                const std::string configuration_platform = "linux";
-            # elif __APPLE__
-                const std::string configuration_platform = "mac";
-            # elif __unix__
-                const std::string configuration_platform = "unix";
-            # elif _WIN32
-                const std::string configuration_platform = "windows"
-            # endif
 
         public:
             explicit configuration () {
@@ -65,17 +58,8 @@ namespace grok::lib {
                 }
             }
 
-            ~ configuration () {
-                option("");
-            }
-
-            util::json option (const std::string& name, bool agnostic = true) {
-                if (agnostic) {
-                    return configuration_options[ name ];
-                }
-                else {
-                    return configuration_options[ name ][ configuration_platform ];
-                }
+            util::json option (const std::string& name) {
+                return configuration_options[ name ];
             }
     };
 }
