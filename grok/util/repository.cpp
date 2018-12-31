@@ -3,6 +3,7 @@
 # include <experimental/filesystem>
 # include <string>
 
+# include "git2.h"
 # include "git2/clone.h"
 # include "git2/global.h"
 # include "git2/repository.h"
@@ -25,13 +26,17 @@ namespace grok::util {
                 repository_git_repository = nullptr;
             }
 
-            void clone (const fs::path& directory) {
-                git_clone_options clone_options = GIT_CLONE_OPTIONS_INIT;
-                git_clone(&repository_git_repository, repository_address.c_str(), directory.c_str(), &clone_options);
+            ~ repository () {
+                git_repository_free(repository_git_repository);
             }
 
-            void checkout (const std::string& branch) {
+            bool clone (const fs::path& directory) {
+                git_clone_options clone_options = GIT_CLONE_OPTIONS_INIT;
+                return git_clone(&repository_git_repository, repository_address.c_str(), directory.c_str(), &clone_options) == 0;
+            }
 
+            bool checkout (const std::string& branch) {
+                return true;
             }
     };
 }

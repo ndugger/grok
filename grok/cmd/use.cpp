@@ -6,6 +6,7 @@
 # include "grok/lib/package.cpp"
 # include "grok/lib/project.cpp"
 # include "grok/lib/registry.cpp"
+# include "grok/util/file.cpp"
 # include "grok/util/git.cpp"
 # include "grok/util/json.cpp"
 # include "grok/util/print.cpp"
@@ -59,7 +60,8 @@ namespace grok::cmd {
                             util::print("now using " + package_name);
                         }
                         else {
-                            util::print("missing or malformed package file");
+                            package.remove();
+                            util::print("missing or malformed package file; please contact the repository's owner");
                         }
                     }
                     else {
@@ -67,13 +69,47 @@ namespace grok::cmd {
                     }
                 }
                 else {
-                    util::print("missing or malformed package file");
+                    util::print("missing or malformed package file; please contact the repository's owner");
                 }
 
                 break;
             }
             else {
-                // use name as repo, download, read name from .grokpackage file, save to project
+                util::git::repository repository(package_name);
+                repository.clone(util::file::current_path() / ".grok" / ".temp");
+
+                util::file file(util::file::current_path() / ".grok" / ".temp" / ".grokpackage");
+
+                if (file.open()) {
+                    package.overwrite(util::json::parse(file.contents()));
+
+                    if (package.valid()) {
+
+                        if (package.exists()) {
+
+                            if (project.uses(package)) {
+                                util::print("project already uses package; did you mean 'grok update " + package_name + "'?");
+                            }
+                            else {
+                                util::print("dependency conflict; package already exists for " + package_name);
+                            }
+                        }
+                        else {
+                            util::file::rename(
+                                 util::file::current_path() / ".grok" / ".temp",
+                                 util::file::current_path() / ".grok" / package.json()[ "package "][ "name" ]
+                            );
+                            util::print("now using " + std::string(package.json()[ "package "][ "name" ]));
+                        }
+                    }
+                    else {
+                        package.remove();
+                        util::print("missing or malformed package file; please contact the repository's owner");
+                    }
+                }
+                else {
+                    util::print("missing or malformed package file; please contact the repository's owner");
+                }
             }
         }
 

@@ -43,6 +43,10 @@ namespace grok::lib {
                 return package_release;
             }
 
+            util::json json () {
+                return package_json;
+            }
+
             bool valid () {
                 return true;
             }
@@ -55,13 +59,17 @@ namespace grok::lib {
                 return true;
             }
 
+            bool remove () {
+                return true;
+            }
+
             bool download () {
                 util::repository repository(package_json[ "package" ][ "repository" ]);
 
-                repository.clone(fs::current_path() / ".grok" / package_name);
-                repository.checkout(package_release);
+                bool cloned = repository.clone(fs::current_path() / ".grok" / package_name);
+                bool checked_out = repository.checkout(package_release);
 
-                return true;
+                return cloned && checked_out;
             }
     };
 }
