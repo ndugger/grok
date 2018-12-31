@@ -1,0 +1,18 @@
+{
+    "dependencies": {},
+    "includes": [
+        "include"
+    ],
+    "libraries": {},
+    "package": {
+        "executables": [
+            "src/format.cc",
+            "src/posix.cc"
+        ],
+        "flags": [],
+        "name": "git2",
+        "release": "master",
+        "repository": "https://github.com/libgit2/libgit2.git",
+        "standard": "17"
+    }
+}
