@@ -3,7 +3,7 @@
 </p>
 
 # grok
-Git-based package manager for C++
+Git-based Package Manager for C++
 
 ### how to install
 In order to install `grok`, simply run the correct install script for your OS:

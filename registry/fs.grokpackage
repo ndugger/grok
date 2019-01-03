@@ -1,0 +1,19 @@
+{
+    "dependencies": {},
+    "includes": [
+        "."
+    ],
+    "libraries": {
+        "stdc++fs": ""
+    },
+    "package": {
+        "executables": [
+            "example/main.cpp"
+        ],
+        "flags": [],
+        "name": "fs",
+        "release": "master",
+        "repository": "https://github.com/fyrware/grok.git",
+        "standard": "17"
+    }
+}
