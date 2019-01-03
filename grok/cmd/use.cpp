@@ -85,7 +85,7 @@ namespace grok::cmd {
                     }
                 }
                 else {
-                    grok::util::print("unable to clone repository @ " + package_name);
+                    grok::util::print("unable to clone repository from " + package_name);
                 }
             }
         }
