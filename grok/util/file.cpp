@@ -16,6 +16,14 @@ namespace grok::util {
                 return fs::current_path();
             }
 
+            static fs::path path (const std::string& path) {
+                return fs::path(path);
+            }
+
+            static void remove (const std::string path) {
+                fs::remove(path);
+            }
+
             static void rename (const std::string& from, const std::string& to) {
                 fs::rename(from, to);
             }

@@ -1,16 +1,12 @@
 # pragma once
 
-# include <experimental/filesystem>
 # include <fstream>
 # include <sstream>
 # include <string>
 
 # include "grok/lib/package.cpp"
+# include "grok/util/file.cpp"
 # include "grok/util/json.cpp"
-
-namespace {
-    namespace fs = std::experimental::filesystem;
-}
 
 namespace grok::lib {
 
@@ -27,29 +23,29 @@ namespace grok::lib {
 
                 registry_string << registry_stream.rdbuf();
 
-                registry_json = util::json::parse(registry_string);
-                registry_directory = fs::path(registry_json[ "directory" ]);
+                registry_json = grok::util::json::parse(registry_string);
+                registry_directory = grok::util::file::path(registry_json[ "directory" ]);
             }
 
             void synchronize () {
 
             }
 
-            bool contains (lib::package& package) {
-                return fs::exists(registry_directory / (package.name() + ".grokpackage"));
+            bool contains (const std::string& package_name) {
+                return fs::exists(registry_directory / (package_name + ".grokpackage"));
             }
 
-            bool open (lib::package& package) {
-                std::ifstream package_stream(registry_directory / (package.name() + ".grokpackage"));
+            grok::lib::package open (const std::string& package_name) {
+                std::ifstream package_stream(registry_directory / (package_name + ".grokpackage"));
                 std::stringstream package_string;
 
                 package_string << package_stream.rdbuf();
 
-                util::json package_json(util::json::parse(package_string));
+                std::string x(package_string.str());
 
-                package.overwrite(package_json);
+                grok::util::json package_json(util::json::parse(package_string));
 
-                return true;
+                return grok::lib::package(package_json);
             }
     };
 }

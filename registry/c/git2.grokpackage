@@ -5,10 +5,7 @@
     ],
     "libraries": {},
     "package": {
-        "executables": [
-            "src/format.cc",
-            "src/posix.cc"
-        ],
+        "executables": [],
         "flags": [],
         "name": "git2",
         "release": "master",

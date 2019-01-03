@@ -3,6 +3,7 @@
     "includes": [
         ".",
         "libraries/fusion",
+        "libraries/git",
         "libraries/git2/include",
         "libraries/json/single_include",
         "libraries/reactor"
