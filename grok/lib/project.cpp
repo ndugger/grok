@@ -11,6 +11,7 @@
 
 # include "git/clone.cpp"
 
+# include "grok/lib/configuration.cpp"
 # include "grok/lib/package.cpp"
 # include "grok/util/json.cpp"
 
@@ -19,7 +20,8 @@ namespace grok::lib {
     class project {
 
         private:
-            lib::package project_package;
+            grok::lib::configuration project_configuration;
+            grok::lib::package project_package;
 
         public:
             explicit project (grok::util::json json = nullptr) : project_package(json) {
@@ -33,6 +35,10 @@ namespace grok::lib {
 
                     project_package = grok::lib::package(util::json::parse(package_string));
                 }
+            }
+
+            grok::lib::configuration& configuration () {
+                return project_configuration;
             }
 
             bool exists () {
