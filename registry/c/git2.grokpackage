@@ -7,7 +7,7 @@
     "package": {
         "executables": [],
         "flags": [],
-        "name": "git2",
+        "name": "c/git2",
         "release": "master",
         "repository": "https://github.com/libgit2/libgit2.git",
         "standard": "17"
