@@ -4,8 +4,10 @@
 # include <sstream>
 # include <string>
 
+# include "fs/file.cpp"
+# include "fs/path.cpp"
+
 # include "grok/lib/package.cpp"
-# include "grok/util/file.cpp"
 # include "grok/util/json.cpp"
 
 namespace grok::lib {
@@ -17,14 +19,14 @@ namespace grok::lib {
             util::json registry_json;
 
         public:
-            explicit registry (const fs::path& directory) {
+            explicit registry (fs::path directory) {
                 std::ifstream registry_stream(directory / ".grokregistry");
                 std::stringstream registry_string;
 
                 registry_string << registry_stream.rdbuf();
 
                 registry_json = grok::util::json::parse(registry_string);
-                registry_directory = grok::util::file::path(registry_json[ "directory" ]);
+                registry_directory = fs::path(registry_json[ "directory" ]);
             }
 
             void synchronize () {
@@ -32,7 +34,7 @@ namespace grok::lib {
             }
 
             bool contains (const std::string& package_name) {
-                return fs::exists(registry_directory / (package_name + ".grokpackage"));
+                return fs::file(registry_directory / (package_name + ".grokpackage")).exists();
             }
 
             grok::lib::package open (const std::string& package_name) {

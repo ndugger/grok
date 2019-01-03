@@ -12,10 +12,6 @@
 
 # include "grok/util/json.cpp"
 
-namespace {
-    namespace fs = std::experimental::filesystem;
-}
-
 namespace grok::lib {
 
     class package {

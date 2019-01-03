@@ -2,6 +2,9 @@
 
 # include <string>
 
+# include "fs/file.cpp"
+# include "fs/path.cpp"
+
 # include "git/manager.cpp"
 # include "git/repository.cpp"
 
@@ -9,7 +12,6 @@
 # include "grok/lib/package.cpp"
 # include "grok/lib/project.cpp"
 # include "grok/lib/registry.cpp"
-# include "grok/util/file.cpp"
 # include "grok/util/json.cpp"
 # include "grok/util/print.cpp"
 
@@ -54,8 +56,8 @@ namespace grok::cmd {
                 break;
             }
             else {
-                git::repository repository(git::clone(package_name, grok::util::file::current_path() / ".grok" / ".temp"));
-                grok::util::file file(grok::util::file::current_path() / ".grok" / ".temp" / ".grokpackage");
+                git::repository repository(git::clone(package_name, fs::current_path() / ".grok" / ".temp"));
+                fs::file file(fs::current_path() / ".grok" / ".temp" / ".grokpackage");
                 grok::lib::package package(grok::util::json::parse(file.contents()));
 
                 if (package.valid()) {
@@ -64,10 +66,7 @@ namespace grok::cmd {
                         grok::util::print("project already uses package; did you mean 'grok update " + package.name() + "'?");
                     }
                     else {
-                        grok::util::file::rename(
-                            util::file::current_path() / ".grok" / ".temp",
-                            util::file::current_path() / ".grok" / package.name()
-                        );
+                        fs::file(fs::current_path() / ".grok" / ".temp").rename(fs::current_path() / ".grok" / package.name());
 
                         project.use(package);
 
@@ -75,7 +74,7 @@ namespace grok::cmd {
                     }
                 }
                 else {
-                    grok::util::file::remove(grok::util::file::current_path() / ".grok" / ".temp");
+                    fs::file(fs::current_path() / ".grok" / ".temp").remove();
                     grok::util::print("missing or malformed package file; please contact the repository's owner");
                 }
             }

@@ -6,15 +6,13 @@
 # include <sstream>
 # include <string>
 
+# include "fs/current_path.cpp"
+# include "fs/file.cpp"
+
 # include "git/clone.cpp"
 
 # include "grok/lib/package.cpp"
-# include "grok/util/file.cpp"
 # include "grok/util/json.cpp"
-
-namespace {
-    namespace fs = std::experimental::filesystem;
-}
 
 namespace grok::lib {
 
@@ -26,7 +24,7 @@ namespace grok::lib {
         public:
             explicit project (grok::util::json json = nullptr) : project_package(json) {
                 if (project_package.json().is_null()) {
-                    std::ifstream package_stream(grok::util::file::current_path() / ".grokpackage");
+                    std::ifstream package_stream(fs::current_path() / ".grokpackage");
                     std::stringstream package_string;
 
                     package_string << package_stream.rdbuf();
@@ -38,7 +36,7 @@ namespace grok::lib {
             }
 
             bool exists () {
-                return fs::exists(fs::current_path() / ".grokpackage");
+                return fs::file(fs::current_path() / ".grokpackage").exists();
             }
 
             bool uses (const std::string& package_name) {

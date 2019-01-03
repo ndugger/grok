@@ -18,6 +18,7 @@ add_executable(grok grok/main.cpp)
 # ==========: grok :==========
 # - includes:
 include_directories("/home/nick/Projects/fyrware/grok/.")
+include_directories("/home/nick/Projects/fyrware/grok/libraries/fs")
 include_directories("/home/nick/Projects/fyrware/grok/libraries/fusion")
 include_directories("/home/nick/Projects/fyrware/grok/libraries/git")
 include_directories("/home/nick/Projects/fyrware/grok/libraries/git2/include")

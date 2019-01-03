@@ -4,11 +4,11 @@
 # include <fstream>
 # include <sstream>
 
-# include "grok/util/json.cpp"
+# include "fs/current_path.cpp"
+# include "fs/file.cpp"
+# include "fs/path.cpp"
 
-namespace {
-    namespace fs = std::experimental::filesystem;
-}
+# include "grok/util/json.cpp"
 
 namespace grok::lib {
 
@@ -44,7 +44,7 @@ namespace grok::lib {
 
         public:
             explicit configuration () {
-                if (fs::exists(fs::current_path() / ".grokconfig")) {
+                if (fs::file(fs::current_path() / ".grokconfig").exists()) {
                     std::ifstream config_stream(fs::current_path() / ".grokconfig");
                     std::stringstream config_string;
 

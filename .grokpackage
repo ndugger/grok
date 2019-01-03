@@ -2,6 +2,7 @@
     "dependencies": {},
     "includes": [
         ".",
+        "libraries/fs",
         "libraries/fusion",
         "libraries/git",
         "libraries/git2/include",
