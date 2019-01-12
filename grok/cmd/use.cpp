@@ -44,6 +44,7 @@ namespace grok::cmd {
                 grok::lib::package package(registry.open(package_name));
 
                 project.use(package);
+                project.save();
 
                 if (project.uses(package.name())) {
                     grok::util::print("now using " + package.name());
@@ -70,6 +71,7 @@ namespace grok::cmd {
                             fs::file(fs::current_path() / ".grok" / ".temp").rename(fs::current_path() / ".grok" / package.name());
 
                             project.use(package);
+                            project.save();
 
                             if (project.uses(package.name())) {
                                 grok::util::print("now using " + package.name());

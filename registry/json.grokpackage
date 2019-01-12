@@ -1,0 +1,15 @@
+{
+    "dependencies": {},
+    "includes": [
+        "single_include"
+    ],
+    "libraries": {},
+    "package": {
+        "executables": [],
+        "flags": [],
+        "name": "json",
+        "release": "v3.5.0",
+        "repository": "https://github.com/nlohmann/json.git",
+        "standard": "11"
+    }
+}

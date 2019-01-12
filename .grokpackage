@@ -1,5 +1,7 @@
 {
-    "dependencies": {},
+    "dependencies": {
+        "fusion": "master"
+    },
     "includes": [
         ".",
         "libraries/fs",

@@ -30,9 +30,6 @@ namespace grok::lib {
                     std::stringstream package_string;
 
                     package_string << package_stream.rdbuf();
-
-                    std::string x(package_string.str());
-
                     project_package = grok::lib::package(util::json::parse(package_string));
                 }
             }
@@ -53,6 +50,10 @@ namespace grok::lib {
             void use (lib::package& package) {
                 git::clone(package.address(), fs::current_path() / ".grok" / package.name());
                 project_package.json()[ "dependencies" ][ package.name() ] = package.release();
+            }
+
+            void save () {
+                fs::file(fs::current_path() / ".grokpackage").write(project_package.json().dump(4), fs::file::mode::out);
             }
     };
 }

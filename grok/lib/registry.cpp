@@ -43,8 +43,6 @@ namespace grok::lib {
 
                 package_string << package_stream.rdbuf();
 
-                std::string x(package_string.str());
-
                 grok::util::json package_json(util::json::parse(package_string));
 
                 return grok::lib::package(package_json);
