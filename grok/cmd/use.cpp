@@ -1,6 +1,7 @@
 # pragma once
 
 # include <string>
+# include <utility>
 
 # include "common/json.cpp"
 
@@ -10,7 +11,6 @@
 # include "git/manager.cpp"
 # include "git/repository.cpp"
 
-# include "grok/lib/configuration.cpp"
 # include "grok/lib/package.cpp"
 # include "grok/lib/project.cpp"
 # include "grok/lib/registry.cpp"
@@ -23,34 +23,40 @@ namespace grok::cmd {
 
         if (!project.exists()) {
             grok::util::print("project has not yet been initialized; run 'grok create' to get started");
+
+            return;
+        }
+
+        if (project.uses(package_name) && fs::file(fs::current_path() / ".grok" / package_name).exists()) {
+            grok::util::print("project already uses package; did you mean 'grok update " + package_name + "'?");
+
             return;
         }
 
         if (package_name.empty()) {
-            grok::util::print("use what?");
-            return;
-        }
+            for (std::pair<std::string, std::string> entry : project.package().dependencies()) {
+                if (!fs::file(fs::current_path() / ".grok" / entry.first).exists()) {
+                    use(entry.first, entry.second);
+                }
+            }
 
-        if (project.uses(package_name)) {
-            grok::util::print("project already uses package; did you mean 'grok update " + package_name + "'?");
             return;
         }
 
         git::manager::init();
 
-        for (const common::json& directory : project.configuration().option("registries")) {
+        for (const common::json &directory : project.configuration().option("registries")) {
             grok::lib::registry registry(directory);
 
             if (registry.contains(package_name)) {
                 grok::lib::package package(registry.open(package_name));
 
                 project.use(package);
-                project.save();
 
                 if (project.uses(package.name())) {
-                    grok::util::print("now using " + package.name());
-                }
-                else {
+                    project.save();
+                    grok::util::print("now using '" + package.name() + "'");
+                } else {
                     grok::util::print("unable to use '" + package_name + "' at this time");
                 }
 
@@ -72,10 +78,10 @@ namespace grok::cmd {
                             fs::file(fs::current_path() / ".grok" / ".temp").rename(fs::current_path() / ".grok" / package.name());
 
                             project.use(package);
-                            project.save();
 
                             if (project.uses(package.name())) {
-                                grok::util::print("now using " + package.name());
+                                project.save();
+                                grok::util::print("now using '" + package.name() + "'");
                             }
                             else {
                                 grok::util::print("unable to use '" + package_name + "' at this time");

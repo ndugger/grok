@@ -12,6 +12,7 @@
 # include "fs/file.cpp"
 
 # include "git/clone.cpp"
+# include "git/repository.cpp"
 
 # include "grok/lib/configuration.cpp"
 # include "grok/lib/package.cpp"
@@ -31,6 +32,7 @@ namespace grok::lib {
                     std::stringstream package_string;
 
                     package_string << package_stream.rdbuf();
+
                     project_package = grok::lib::package(common::json::parse(package_string));
                 }
             }
@@ -39,18 +41,26 @@ namespace grok::lib {
                 return project_configuration;
             }
 
+            grok::lib::package& package () {
+                return project_package;
+            }
+
             bool exists () {
                 return fs::file(fs::current_path() / ".grokpackage").exists();
             }
 
             bool uses (const std::string& package_name) {
                 std::map<std::string, std::string> dependencies(project_package.json()[ "dependencies" ]);
+
                 return dependencies.find(package_name) != dependencies.end();
             }
 
             void use (lib::package& package) {
-                git::clone(package.address(), fs::current_path() / ".grok" / package.name());
-                project_package.json()[ "dependencies" ][ package.name() ] = package.release();
+                git::repository repository(git::clone(package.address(), fs::current_path() / ".grok" / package.name()));
+
+                if (repository.exists()) {
+                    project_package.json()[ "dependencies" ][ package.name() ] = package.release();
+                }
             }
 
             void save () {

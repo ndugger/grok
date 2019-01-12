@@ -36,8 +36,12 @@ namespace grok::lib {
                 return package_json;
             }
 
+            std::map<std::string, std::string> dependencies () {
+                return package_json[ "dependencies" ];
+            }
+
             std::string name () {
-                return common::json(package_json[ "package" ][ "name" ]).get<std::string>();
+                return package_json[ "package" ][ "name" ];
             }
 
             std::string release () {

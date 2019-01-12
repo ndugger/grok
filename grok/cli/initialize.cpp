@@ -5,8 +5,10 @@
 # include <string>
 
 # include "grok/cli/command.cpp"
+# include "grok/cmd/update.cpp"
 # include "grok/cmd/use.cpp"
 # include "grok/util/print.cpp"
+
 # include "reactor/core.cpp"
 # include "reactor/event.cpp"
 
@@ -18,12 +20,17 @@ namespace grok::cli {
             std::string command_target = cmd->target();
 
             try {
+                if (command_name == "update") {
+                    grok::cmd::update(command_target);
+                }
+
                 if (command_name == "use") {
-                    cmd::use(command_target);
+                    grok::cmd::use(command_target);
                 }
             }
             catch (int code) {
                 application.shutdown(code);
+                return;
             }
 
             application.shutdown(0);
