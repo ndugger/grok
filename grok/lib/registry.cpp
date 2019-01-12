@@ -4,11 +4,12 @@
 # include <sstream>
 # include <string>
 
+# include "common/json.cpp"
+
 # include "fs/file.cpp"
 # include "fs/path.cpp"
 
 # include "grok/lib/package.cpp"
-# include "grok/util/json.cpp"
 
 namespace grok::lib {
 
@@ -16,7 +17,7 @@ namespace grok::lib {
 
         private:
             fs::path registry_directory;
-            util::json registry_json;
+            common::json registry_json;
 
         public:
             explicit registry (fs::path directory) {
@@ -25,7 +26,7 @@ namespace grok::lib {
 
                 registry_string << registry_stream.rdbuf();
 
-                registry_json = grok::util::json::parse(registry_string);
+                registry_json = common::json::parse(registry_string);
                 registry_directory = fs::path(registry_json[ "directory" ]);
             }
 
@@ -43,7 +44,7 @@ namespace grok::lib {
 
                 package_string << package_stream.rdbuf();
 
-                grok::util::json package_json(util::json::parse(package_string));
+                common::json package_json(common::json::parse(package_string));
 
                 return grok::lib::package(package_json);
             }

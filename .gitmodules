@@ -17,3 +17,6 @@
 [submodule "libraries/fs"]
 	path = libraries/fs
 	url = https://github.com/fyrware/fs.git
+[submodule "libraries/common"]
+	path = libraries/common
+	url = https://github.com/fyrware/common.git

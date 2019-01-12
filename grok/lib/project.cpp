@@ -6,6 +6,8 @@
 # include <sstream>
 # include <string>
 
+# include "common/json.cpp"
+
 # include "fs/current_path.cpp"
 # include "fs/file.cpp"
 
@@ -13,7 +15,6 @@
 
 # include "grok/lib/configuration.cpp"
 # include "grok/lib/package.cpp"
-# include "grok/util/json.cpp"
 
 namespace grok::lib {
 
@@ -24,13 +25,13 @@ namespace grok::lib {
             grok::lib::package project_package;
 
         public:
-            explicit project (grok::util::json json = nullptr) : project_package(json) {
+            explicit project (common::json json = nullptr) : project_package(json) {
                 if (project_package.json().is_null()) {
                     std::ifstream package_stream(fs::current_path() / ".grokpackage");
                     std::stringstream package_string;
 
                     package_string << package_stream.rdbuf();
-                    project_package = grok::lib::package(util::json::parse(package_string));
+                    project_package = grok::lib::package(common::json::parse(package_string));
                 }
             }
 

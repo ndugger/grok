@@ -1,9 +1,8 @@
 {
-    "dependencies": {
-        "fusion": "master"
-    },
+    "dependencies": {},
     "includes": [
         ".",
+        "libraries/common",
         "libraries/fs",
         "libraries/fusion",
         "libraries/git",

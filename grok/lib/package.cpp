@@ -6,25 +6,25 @@
 # include <sstream>
 # include <string>
 
+# include "common/json.cpp"
+
 # include "git/clone.cpp"
 # include "git/manager.cpp"
 # include "git/repository.cpp"
-
-# include "grok/util/json.cpp"
 
 namespace grok::lib {
 
     class package {
 
         private:
-            util::json package_json;
+            common::json package_json;
 
         public:
-            explicit package (util::json json) {
+            explicit package (common::json json) {
                 package_json = json;
             }
 
-            util::json operator [ ] (const std::string& key) {
+            common::json operator [ ] (const std::string& key) {
                 return package_json[ key ];
             }
 
@@ -32,12 +32,12 @@ namespace grok::lib {
                 return true;
             }
 
-            grok::util::json& json () {
+            common::json& json () {
                 return package_json;
             }
 
             std::string name () {
-                return grok::util::json(package_json[ "package" ][ "name" ]).get<std::string>();
+                return common::json(package_json[ "package" ][ "name" ]).get<std::string>();
             }
 
             std::string release () {

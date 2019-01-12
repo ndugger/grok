@@ -2,6 +2,8 @@
 
 # include <string>
 
+# include "common/json.cpp"
+
 # include "fs/file.cpp"
 # include "fs/path.cpp"
 
@@ -12,7 +14,6 @@
 # include "grok/lib/package.cpp"
 # include "grok/lib/project.cpp"
 # include "grok/lib/registry.cpp"
-# include "grok/util/json.cpp"
 # include "grok/util/print.cpp"
 
 namespace grok::cmd {
@@ -37,7 +38,7 @@ namespace grok::cmd {
 
         git::manager::init();
 
-        for (const util::json& directory : project.configuration().option("registries")) {
+        for (const common::json& directory : project.configuration().option("registries")) {
             grok::lib::registry registry(directory);
 
             if (registry.contains(package_name)) {
@@ -60,7 +61,7 @@ namespace grok::cmd {
 
                 if (repository.exists()) {
                     fs::file file(fs::current_path() / ".grok" / ".temp" / ".grokpackage");
-                    grok::lib::package package(grok::util::json::parse(file.contents()));
+                    grok::lib::package package(common::json::parse(file.contents()));
 
                     if (package.valid()) {
 
