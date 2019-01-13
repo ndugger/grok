@@ -5,8 +5,11 @@
 # include <string>
 
 # include "grok/cli/command.cpp"
+# include "grok/cmd/apply.cpp"
+# include "grok/cmd/create.cpp"
 # include "grok/cmd/update.cpp"
 # include "grok/cmd/use.cpp"
+# include "grok/lib/project.cpp"
 # include "grok/util/print.cpp"
 
 # include "reactor/core.cpp"
@@ -16,21 +19,25 @@ namespace grok::cli {
 
     void initialize (reactor::core& application) {
         application.observe("command").cast<command*>().for_each([ &application ] (command* cmd) {
-            std::string command_name = cmd->name();
-            std::string command_target = cmd->target();
+            std::string command_name(cmd->name());
 
-            try {
-                if (command_name == "update") {
-                    grok::cmd::update(command_target);
-                }
-
-                if (command_name == "use") {
-                    grok::cmd::use(command_target);
-                }
+            if (command_name == "apply") {
+                grok::cmd::apply();
             }
-            catch (int code) {
-                application.shutdown(code);
-                return;
+
+            if (command_name == "create") {
+                grok::cmd::create();
+            }
+
+            if (command_name == "update") {
+                grok::cmd::update(cmd->target());
+            }
+
+            if (command_name == "use") {
+                std::string package_name(cmd->target());
+                std::string package_release(cmd->arguments().empty() ? "master" : cmd->arguments().at(0));
+
+                grok::cmd::use(package_name, package_release);
             }
 
             application.shutdown(0);

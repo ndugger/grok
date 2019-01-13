@@ -38,7 +38,7 @@ namespace grok::cmd {
         }
 
         if (package_name.empty()) {
-            for (std::pair<std::string, std::string> entry : project.package().dependencies()) {
+            for (std::pair<std::string, std::string> entry : project.info().dependencies()) {
                 if (!fs::file(fs::current_path() / ".grok" / entry.first).exists()) {
                     update(entry.first);
                 }

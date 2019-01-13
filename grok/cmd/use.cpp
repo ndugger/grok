@@ -5,6 +5,7 @@
 
 # include "common/json.cpp"
 
+# include "fs/current_path.cpp"
 # include "fs/file.cpp"
 # include "fs/path.cpp"
 
@@ -18,7 +19,7 @@
 
 namespace grok::cmd {
 
-    void use (const std::string& package_name, const std::string package_release = "master") {
+    void use (const std::string& package_name, const std::string& package_release = "master") {
         grok::lib::project project;
 
         if (!project.exists()) {
@@ -34,7 +35,7 @@ namespace grok::cmd {
         }
 
         if (package_name.empty()) {
-            for (std::pair<std::string, std::string> entry : project.package().dependencies()) {
+            for (std::pair<std::string, std::string> entry : project.info().dependencies()) {
                 if (!fs::file(fs::current_path() / ".grok" / entry.first).exists()) {
                     use(entry.first, entry.second);
                 }

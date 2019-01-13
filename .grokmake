@@ -1,31 +1,22 @@
-#                                _
-#                               //
-#       ____    ____   ____    //
-#      //  \\  //  \\ //  \\  //___
-#     //   // //     //   // //\\
-#    //   // //     //   // //  \\
-#    \\__// //      \\__// //    \\
-#       //  PACKAGE MANAGER
-#  \\__//
+# ========: generated cmake :========
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_FLAGS -pthread)
 
 project(grok)
 
-set(CMAKE_CXX_STANDARD "17")
-set(CMAKE_CXX_FLAGS -pthread)
-
 add_executable(grok grok/main.cpp)
 
-# ==========: grok :==========
+# ========: grok :========
 # - includes:
-include_directories("/home/nick/Projects/fyrware/grok/.")
-include_directories("/home/nick/Projects/fyrware/grok/libraries/common")
-include_directories("/home/nick/Projects/fyrware/grok/libraries/fs")
-include_directories("/home/nick/Projects/fyrware/grok/libraries/fusion")
-include_directories("/home/nick/Projects/fyrware/grok/libraries/git")
-include_directories("/home/nick/Projects/fyrware/grok/libraries/git2/include")
-include_directories("/home/nick/Projects/fyrware/grok/libraries/json/single_include")
-include_directories("/home/nick/Projects/fyrware/grok/libraries/reactor")
-# - libraries
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/.")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/libraries/common")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/libraries/fs")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/libraries/fusion")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/libraries/git")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/libraries/git2/include")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/libraries/json/single_include")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/libraries/reactor")
+# - libraries:
 add_library(git2 SHARED IMPORTED)
-set_target_properties(git2 PROPERTIES IMPORTED_LOCATION "/home/nick/Projects/fyrware/grok/libraries/git2/build/libgit2.so")
+set_target_properties(git2 PROPERTIES IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/libraries/git2/build/libgit2.so")
 target_link_libraries(grok git2 stdc++fs)

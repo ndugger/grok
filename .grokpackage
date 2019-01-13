@@ -1,7 +1,7 @@
 {
-    "dependencies": {
-        "fs": "master",
-        "fusion": "master"
+    "dependencies": {},
+    "flags": {
+        "pthread": ""
     },
     "includes": [
         ".",
@@ -18,15 +18,12 @@
         "stdc++fs": ""
     },
     "package": {
-        "executables": [
-            "grok/main.cpp"
-        ],
-        "flags": [
-            "pthread"
-        ],
+        "address": "https://github.com/fyrware/grok.git",
         "name": "grok",
         "release": "master",
-        "repository": "https://github.com/fyrware/grok.git",
         "standard": "17"
-    }
+    },
+    "sources": [
+        "grok/main.cpp"
+    ]
 }

@@ -15,6 +15,7 @@
 # include "git/repository.cpp"
 
 # include "grok/lib/configuration.cpp"
+# include "grok/lib/generator.cpp"
 # include "grok/lib/package.cpp"
 
 namespace grok::lib {
@@ -26,14 +27,14 @@ namespace grok::lib {
             grok::lib::package project_package;
 
         public:
-            explicit project (common::json json = nullptr) : project_package(json) {
-                if (project_package.json().is_null()) {
+            explicit project (const common::json& json = nullptr) : project_package(json, true) {
+                if (exists()) {
                     std::ifstream package_stream(fs::current_path() / ".grokpackage");
                     std::stringstream package_string;
 
                     package_string << package_stream.rdbuf();
 
-                    project_package = grok::lib::package(common::json::parse(package_string));
+                    project_package = grok::lib::package(common::json::parse(package_string), true);
                 }
             }
 
@@ -41,7 +42,7 @@ namespace grok::lib {
                 return project_configuration;
             }
 
-            grok::lib::package& package () {
+            grok::lib::package& info () {
                 return project_package;
             }
 
@@ -53,6 +54,38 @@ namespace grok::lib {
                 std::map<std::string, std::string> dependencies(project_package.json()[ "dependencies" ]);
 
                 return dependencies.find(package_name) != dependencies.end();
+            }
+
+            void flag (const std::string& flag, const std::string& value = "") {
+                project_package.json().at("flags").emplace(flag, value);
+            }
+
+            void include (const std::string& directory) {
+                project_package.json().at("includes").emplace_back(directory);
+            }
+
+            void release (const std::string& release) {
+                project_package.json()[ "package" ][ "release" ] = release;
+            }
+
+            void remote (const std::string& address) {
+                project_package.json()[ "package" ][ "address" ] = address;
+            }
+
+            void rename (const std::string& package_name) {
+                project_package.json()[ "package" ][ "name" ] = package_name;
+            }
+
+            void require (const std::string& library, const std::string& location = "") {
+                project_package.json().at("libraries").emplace(library, location);
+            }
+
+            void source (const std::string& directory) {
+                project_package.json().at("source").emplace_back(directory);
+            }
+
+            void standard (const std::string& standard) {
+                project_package.json()[ "package" ][ "standard" ] = standard;
             }
 
             void use (lib::package& package) {
