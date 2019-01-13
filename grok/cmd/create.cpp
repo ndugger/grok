@@ -72,6 +72,7 @@ namespace grok::cmd {
 
         project.save();
 
+        grok::util::print("project has been created");
         grok::cmd::apply();
     }
 }

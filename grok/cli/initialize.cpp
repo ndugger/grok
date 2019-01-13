@@ -7,6 +7,7 @@
 # include "grok/cli/command.cpp"
 # include "grok/cmd/apply.cpp"
 # include "grok/cmd/create.cpp"
+# include "grok/cmd/sync.cpp"
 # include "grok/cmd/update.cpp"
 # include "grok/cmd/use.cpp"
 # include "grok/lib/project.cpp"
@@ -27,6 +28,10 @@ namespace grok::cli {
 
             if (command_name == "create") {
                 grok::cmd::create();
+            }
+
+            if (command_name == "sync") {
+                grok::cmd::sync();
             }
 
             if (command_name == "update") {
