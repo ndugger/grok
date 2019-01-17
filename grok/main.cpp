@@ -12,7 +12,7 @@ namespace grok {
 
     int main (std::vector<std::string> arguments) {
         const std::string command_name(arguments.size() > 1 ? arguments.at(1) : "");
-        const std::vector<std::string> command_arguments(arguments.begin() + 1, arguments.end());
+        const std::vector<std::string> command_arguments(arguments.begin() + 2, arguments.end());
 
         reactor::core application({ cli::initialize });
 
