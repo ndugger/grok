@@ -13,13 +13,11 @@ namespace grok {
     int main (std::vector<std::string> arguments) {
         const std::string command_name(arguments.size() > 1 ? arguments.at(1) : "");
         const std::vector<std::string> command_arguments(arguments.begin() + 1, arguments.end());
-        grok::cli::command command(command_name, command_arguments);
-
 
         reactor::core application({ cli::initialize });
 
         application.start();
-        application.emit("command", &command);
+        application.emit("command",  new grok::cli::command(command_name, command_arguments));
 
         while (application.running());
         return application.status();
