@@ -1,10 +1,17 @@
 {
+    "dependencies": {},
+    "flags": {
+        "pthread": ""
+    },
     "includes": [
         "."
     ],
+    "libraries": {}
     "package": {
+        "address": "https://github.com/fyrware/fusion.git",
         "name": "fusion",
         "release": "master",
-        "repository": "https://github.com/fyrware/fusion.git"
-    }
+        "standard": "17"
+    },
+    "sources": []
 }
