@@ -21,14 +21,15 @@ namespace grok::cmd {
             git::repository repository(git::open(directory));
 
             if (repository.exists()) {
-                git::branch local(repository.branch("master"));
                 git::remote origin(repository.remote("origin"));
 
                 origin.fetch();
 
-                git::branch upstream(origin.branch("master"));
+                git::branch master(repository.branch("master"));
+                git::branch origin_master(origin.branch("master"));
 
-                repository.merge(local, upstream);
+                repository.set_head(master);
+                repository.merge(master, origin_master);
 
                 grok::util::print("successfully synced registry in '" + directory + "'");
             }
