@@ -6,7 +6,7 @@
     "includes": [
         "."
     ],
-    "libraries": {}
+    "libraries": {},
     "package": {
         "address": "https://github.com/fyrware/fusion.git",
         "name": "fusion",

@@ -30,7 +30,14 @@ namespace grok::lib {
                         { "flags", std::map<std::string, std::string>() },
                         { "includes", std::vector<std::string>() },
                         { "libraries", std::map<std::string, std::string>() },
-                        { "package", std::map<std::string, std::string>() },
+                        { "package",
+                            {
+                                { "address", "" },
+                                { "name", "" },
+                                { "release", "" },
+                                { "standard", "" }
+                            }
+                        },
                         { "sources", std::vector<std::string>() }
                     };
                 }
