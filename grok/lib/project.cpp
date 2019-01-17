@@ -81,7 +81,7 @@ namespace grok::lib {
             }
 
             void source (const std::string& directory) {
-                project_package.json().at("source").emplace_back(directory);
+                project_package.json().at("sources").emplace_back(directory);
             }
 
             void standard (const std::string& standard) {
