@@ -19,14 +19,14 @@ Prerequisites:
   
 - **`use`:**
   ```shell
-  grok use <package_name> [<package_release>]
+  grok use [<package_name>[, <package_release>]]
   ```
   The `use` command will track down a dependency, save it to the `.grok` folder, and apply it to your project. If a 
   `<package_release>` was provided, then it will also be applied.
 
 - **`update`:**
   ```shell
-  grok update <package_name> [<package_release>]
+  grok update [<package_name>[, <package_release>]]
   ```
   The `update` command retrieves updates from the repository of the package and saves them to your `.grok` folder. If a 
   `<package_release>` was provided, then it will also be applied.
