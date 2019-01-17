@@ -17,11 +17,8 @@ namespace grok {
 
         reactor::core application({ cli::initialize });
 
-        application.observe("start").for_each([ & ] (reactor::event* e) {
-            application.emit("command", new cli::command(command_name, command_target, command_arguments));
-        });
-
         application.start();
+        application.emit("command", new cli::command(command_name, command_target, command_arguments));
 
         while (application.running());
         return application.status();
