@@ -35,11 +35,11 @@ namespace grok::cli {
             }
 
             if (command_name == "update") {
-                grok::cmd::update(cmd->target());
+                grok::cmd::update(cmd->arguments().at(0));
             }
 
             if (command_name == "use") {
-                std::string package_name(cmd->target());
+                std::string package_name(cmd->arguments().at(0));
                 std::string package_release(cmd->arguments().empty() ? "master" : cmd->arguments().at(0));
 
                 grok::cmd::use(package_name, package_release);
