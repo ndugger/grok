@@ -18,9 +18,8 @@ namespace grok::gen {
             std::string generate (grok::lib::package& package) override {
                 std::stringstream generated;
 
-                generated << "# ========: generated cmake :========" << std::endl;
-
                 if (package.root()) {
+                    generated << "# ========: generated cmake :========" << std::endl;
                     generated << "set(CMAKE_CXX_STANDARD " + package.standard() + ")" << std::endl;
 
                     for (std::pair<std::string, std::string> pair : package.flags()) {
@@ -82,25 +81,23 @@ namespace grok::gen {
 
                         generated << ")" << std::endl;
                     }
+                }
 
-                    std::map<std::string, std::string> dependencies(package.dependencies());
+                if (!package.dependencies().empty()) {
+                    grok::lib::project project;
 
-                    if (!dependencies.empty()) {
-                        grok::lib::project project;
+                    for (std::pair pair : package.dependencies()) {
+                        generated << std::endl;
 
-                        for (std::pair pair : package.dependencies()) {
-                            generated << std::endl;
+                        for (const common::json &directory : project.configuration().option("registries")) {
+                            grok::lib::registry registry(directory);
 
-                            for (const common::json &directory : project.configuration().option("registries")) {
-                                grok::lib::registry registry(directory);
+                            if (registry.contains(pair.first)) {
+                                grok::lib::package package(registry.open(pair.first));
 
-                                if (registry.contains(pair.first)) {
-                                    grok::lib::package package(registry.open(pair.first));
+                                generated << generate(package) << std::endl;
 
-                                    generated << generate(package) << std::endl;
-
-                                    break;
-                                }
+                                break;
                             }
                         }
                     }
