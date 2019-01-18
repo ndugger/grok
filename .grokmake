@@ -20,3 +20,4 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/libraries/reactor")
 add_library(git2 SHARED IMPORTED)
 set_target_properties(git2 PROPERTIES IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/libraries/git2/build/libgit2.so")
 target_link_libraries(grok git2 stdc++fs)
+

@@ -56,6 +56,7 @@ namespace grok::cmd {
 
                 if (project.uses(package.name())) {
                     project.save();
+
                     grok::util::print("now using '" + package.name() + "'");
                 } else {
                     grok::util::print("unable to use '" + package_name + "' at this time");
@@ -82,6 +83,7 @@ namespace grok::cmd {
 
                             if (project.uses(package.name())) {
                                 project.save();
+
                                 grok::util::print("now using '" + package.name() + "'");
                             }
                             else {

@@ -48,7 +48,7 @@ namespace grok::gen {
                             generated << "include_directories(\"${CMAKE_CURRENT_SOURCE_DIR}/" + path + "\")" << std::endl;
                         }
                         else {
-                            generated << "include_directories(\'${CMAKE_CURRENT_SOURCE_DIR}/.grok/" + package.name() + "/" + path + "\")" << std::endl;
+                            generated << "include_directories(\"${CMAKE_CURRENT_SOURCE_DIR}/.grok/" + package.name() + "/" + path + "\")" << std::endl;
                         }
                     }
                 }
@@ -83,7 +83,9 @@ namespace grok::gen {
                         generated << ")" << std::endl;
                     }
 
-                    if (!package.dependencies().empty()) {
+                    std::map<std::string, std::string> dependencies(package.dependencies());
+
+                    if (!dependencies.empty()) {
                         grok::lib::project project;
 
                         for (std::pair pair : package.dependencies()) {
