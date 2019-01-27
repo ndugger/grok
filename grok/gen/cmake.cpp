@@ -19,25 +19,31 @@ namespace grok::gen {
                 std::stringstream generated;
 
                 if (package.root()) {
-                    generated << "# ========: generated cmake :========" << std::endl;
+                    generated << "# ========: cmake :========" << std::endl;
                     generated << "set(CMAKE_CXX_STANDARD " + package.standard() + ")" << std::endl;
-
-                    for (std::pair<std::string, std::string> pair : package.flags()) {
-                        generated << "set(CMAKE_CXX_FLAGS -" + pair.first + (pair.second.empty() ? "" : "=" + pair.second) + ")" << std::endl;
-                    }
 
                     generated << std::endl;
                     generated << "project(" + package.name() + ")" << std::endl;
                     generated << std::endl;
+                }
+
+                generated << "# ========: " + package.name() + " :========" << std::endl;
+
+                if (!package.flags().empty()) {
+                    generated << "# - flags:" << std::endl;
+
+                    for (std::pair<std::string, std::string> pair : package.flags()) {
+                        generated << "set(CMAKE_CXX_FLAGS -" + pair.first + (pair.second.empty() ? "" : "=" + pair.second) + ")" << std::endl;
+                    }
+                }
+
+                if (!package.sources().empty()) {
+                    generated << "# - executables:" << std::endl;
 
                     for (const std::string& path : package.sources()) {
                         generated << "add_executable(" + package.name() + " " + path + ")" << std::endl;
                     }
-
-                    generated << std::endl;
                 }
-
-                generated << "# ========: " + package.name() + " :========" << std::endl;
 
                 if (!package.includes().empty()) {
                     generated << "# - includes:" << std::endl;
