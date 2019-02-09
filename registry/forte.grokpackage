@@ -13,5 +13,7 @@
         "release": "master",
         "standard": "17"
     },
-    "sources": []
+    "sources": [
+        "example/main.cpp"
+    ]
 }
