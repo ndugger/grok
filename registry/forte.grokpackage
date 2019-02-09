@@ -1,0 +1,17 @@
+{
+    "dependencies": {
+        "fusion": "master"
+    },
+    "flags": {},
+    "includes": [
+        "."
+    ],
+    "libraries": {},
+    "package": {
+        "address": "https://github.com/fyrware/forte.git",
+        "name": "forte",
+        "release": "master",
+        "standard": "17"
+    },
+    "sources": []
+}
