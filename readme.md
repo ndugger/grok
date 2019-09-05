@@ -1,6 +1,8 @@
 # grok
 Git-Based Package Manager for C++
 
+I wrote this project about 3 times, and eventually overengineered it to death. This was just an exercise in learning, so DO NOT USE.
+
 ### how to install
 In order to install `grok`, simply run the correct install script for your OS:
 
